@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Tchig Mono";
+  src: url("../public/TchigMono/TchigMono-Regular.eot");
+  src: local("Tchig Mono Regular"), local("TchigMono-Regular"),
+    url("../public/TchigMono/TchigMono-Regular.eot?#iefix")
+      format("embedded-opentype"),
+    url("../public/TchigMono/TchigMono-Regular.woff2") format("woff2"),
+    url("../public/TchigMono/TchigMono-Regular.woff") format("woff"),
+    url("../public/TchigMono/TchigMono-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

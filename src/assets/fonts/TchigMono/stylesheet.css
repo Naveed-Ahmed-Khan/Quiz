@@ -1,0 +1,65 @@
+@font-face {
+    font-family: 'Tchig Mono';
+    src: url('TchigMono-Medium.eot');
+    src: local('Tchig Mono Medium'), local('TchigMono-Medium'),
+        url('TchigMono-Medium.eot?#iefix') format('embedded-opentype'),
+        url('TchigMono-Medium.woff2') format('woff2'),
+        url('TchigMono-Medium.woff') format('woff'),
+        url('TchigMono-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tchig Mono';
+    src: url('TchigMono-Light.eot');
+    src: local('Tchig Mono Light'), local('TchigMono-Light'),
+        url('TchigMono-Light.eot?#iefix') format('embedded-opentype'),
+        url('TchigMono-Light.woff2') format('woff2'),
+        url('TchigMono-Light.woff') format('woff'),
+        url('TchigMono-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tchig Mono';
+    src: url('TchigMono-Bold.eot');
+    src: local('Tchig Mono Bold'), local('TchigMono-Bold'),
+        url('TchigMono-Bold.eot?#iefix') format('embedded-opentype'),
+        url('TchigMono-Bold.woff2') format('woff2'),
+        url('TchigMono-Bold.woff') format('woff'),
+        url('TchigMono-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tchig Mono';
+    src: url('TchigMono-Black.eot');
+    src: local('Tchig Mono Black'), local('TchigMono-Black'),
+        url('TchigMono-Black.eot?#iefix') format('embedded-opentype'),
+        url('TchigMono-Black.woff2') format('woff2'),
+        url('TchigMono-Black.woff') format('woff'),
+        url('TchigMono-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tchig Mono';
+    src: url('TchigMono-Regular.eot');
+    src: local('Tchig Mono Regular'), local('TchigMono-Regular'),
+        url('TchigMono-Regular.eot?#iefix') format('embedded-opentype'),
+        url('TchigMono-Regular.woff2') format('woff2'),
+        url('TchigMono-Regular.woff') format('woff'),
+        url('TchigMono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
