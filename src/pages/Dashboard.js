@@ -16,34 +16,27 @@ const Dashboard = () => {
   const [showBackdrop, setShowBackdrop] = useState(false);
 
   return (
-    <>
-      <div>
-        {/* <HomeBackground /> */}
-        <BackgroundDashboard />
+    <div className="min-h-screen">
+      <Navbar
+        open={open}
+        setOpen={setOpen}
+        showBackdrop={showBackdrop}
+        setShowBackdrop={setShowBackdrop}
+        setIsChatOpen={setIsChatOpen}
+        isChatOpen={isChatOpen}
+      />
 
-        <Sidebar
-          open={open}
-          setOpen={setOpen}
-          showBackdrop={showBackdrop}
-          setShowBackdrop={setShowBackdrop}
-        />
+      <Sidebar
+        open={open}
+        setOpen={setOpen}
+        showBackdrop={showBackdrop}
+        setShowBackdrop={setShowBackdrop}
+      />
 
-        <Navbar
-          open={open}
-          setOpen={setOpen}
-          showBackdrop={showBackdrop}
-          setShowBackdrop={setShowBackdrop}
-          setIsChatOpen={setIsChatOpen}
-          isChatOpen={isChatOpen}
-        />
-
-        <DetailsSidebar />
-
-        <div className="pt-14 md:pt-0 md:ml-40 relative overflow-auto ">
-          <Outlet />
-        </div>
+      <div className="flex-auto pt-14 md:pt-0 md:ml-[17rem] relative overflow-auto ">
+        <Outlet />
       </div>
-    </>
+    </div>
   );
 };
 

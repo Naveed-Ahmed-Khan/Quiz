@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import Items from "./pages/Items";
 import Login from "./pages/Login";
 import Payment from "./pages/Payment";
+import Quiz from "./pages/Quiz";
 import Signup from "./pages/Signup";
 import Subscription from "./pages/Subscription";
 import Users from "./pages/Users";
@@ -26,17 +27,12 @@ function App() {
 
       <Route path="/" element={<Dashboard />}>
         <Route path="/home" element={<Home />} />
+        <Route path="/quiz" element={<Quiz />} />
         <Route path="/users" element={<Users />} />
         <Route path="/business" element={<Business />} />
         <Route path="/items" element={<AllGalleries />} />
         <Route path="/add-item" element={<AddItem />} />
         <Route path="/edit/:item" element={<EditItem />} />
-      </Route>
-      <Route path="/dashboard" element={<BusinessDashboard />}>
-        <Route path="/dashboard/home" element={<BusinessHome />} />
-        <Route path="/dashboard/items" element={<AllGalleries />} />
-        <Route path="/dashboard/add-item" element={<AddItem />} />
-        <Route path="/dashboard/edit/:item" element={<EditItem />} />
       </Route>
     </Routes>
   );

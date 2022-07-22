@@ -97,7 +97,7 @@ const Navbar = (props) => {
       </div>
 
       {/* Desktop Navbar */}
-      <div className="z-30 fixed hidden md:pl-52 md:pr-8 md:flex w-full items-center justify-between px-6 pt-10 pb-12 h-16 bg-white">
+      {/* <div className="z-30 fixed hidden md:pl-52 md:pr-8 md:flex w-full items-center justify-between px-6 pt-10 pb-12 h-16 bg-white">
         {location.pathname === "/home" ||
         location.pathname === "/dashboard/home" ? (
           <div>
@@ -159,7 +159,7 @@ const Navbar = (props) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };
