@@ -6,13 +6,14 @@ import Rating from "../components/UI/Rating";
 import Select from "../components/UI/Select";
 import { useStateContext } from "../contexts/ContextProvider";
 import { db } from "../firebase-config";
-export default function Quiz() {
+
+export default function News() {
   const navigate = useNavigate();
   const { businesses, updateCheck } = useStateContext();
   const [disabled, setDisabled] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   return (
-    <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-0 xl:py-6 sm:mx-auto ">
+    <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-0 xl:py-6 sm:mx-auto">
       <div className="">
         <div className="mt-6 sm:mt-0 text-end">
           <form className="relative flex items-center md:flex-row w-full sm:w-fit md:space-x-3 md:space-y-0 ">
@@ -59,7 +60,7 @@ export default function Quiz() {
             </svg>
 
             <h2 className="text-xxl sm:text-2xl text-primary-500 font-medium">
-              Quiz
+              News
             </h2>
           </div>
           <div className="flex gap-4">
@@ -82,8 +83,8 @@ export default function Quiz() {
               </Select>
             </div>
             <button className="px-3 py-2 flex items-center justify-between bg-secondary-300 w-44 rounded">
-              <p onClick={() => navigate("/add-quiz")} className="text-sm">
-                Add Quiz
+              <p onClick={() => navigate("/add-news")} className="text-sm">
+                Add News
               </p>
               <svg
                 className="w-4 h-4 text-white"
@@ -99,12 +100,12 @@ export default function Quiz() {
         <div className="h-[70vh] min-w-80 w-full inline-block shadow-2xl">
           <div className="">
             <div className="py-4 px-0 sm:px-4 w-full grid grid-cols-12 text-base text-left bg-primary-100">
-              <h3 className="col-span-1 ">ID</h3>
               <h3 className="col-span-1 ">Image</h3>
               <h3 className="col-span-2 ">Title</h3>
               <h3 className="col-span-3 ">Paragraph</h3>
+              <h3 className="col-span-2 ">Categories</h3>
               <h3 className="col-span-2 ">Author</h3>
-              <h3 className="col-span-2 ">Rating</h3>
+              <h3 className="col-span-1 ">Date</h3>
               <h3 className="col-span-1 text-center">Action</h3>
             </div>
             <div className="h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 ">
@@ -126,7 +127,6 @@ export default function Quiz() {
                       business.isDisabled ? "opacity-50" : "opacity-100"
                     } border-b border-b-primary-100 text-secondary-100 items-center`}
                   >
-                    <div className="col-span-1">#1234</div>
                     <div className="col-span-1 flex items-center gap-2">
                       <img
                         className="object-contain h-8"
@@ -136,6 +136,7 @@ export default function Quiz() {
                       {/* <p className="py-3 text-left">{business.name}</p> */}
                     </div>
                     <div className="col-span-2">{business.name}</div>
+
                     {subscriptionRem ? (
                       <p className="col-span-3 py-3 text-left">
                         {subscriptionRem.getDate()} days:{" "}
@@ -146,10 +147,9 @@ export default function Quiz() {
                         {"Not subscribed"}
                       </p>
                     )}
+                    <div className="col-span-2">Single Cases</div>
                     <div className="col-span-2">Thomas Lee</div>
-                    <div className="col-span-2">
-                      <Rating />
-                    </div>
+                    <div className="col-span-1">01/02/2022</div>
                     <div className="col-span-1 text-center">...</div>
                     {/* <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1 py-1">
                       <button

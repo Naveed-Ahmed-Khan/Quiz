@@ -21,14 +21,8 @@ const Login = () => {
       const { user } = await login(email, password);
       console.log(user);
       if (user.email === "admin@gmail.com") {
-        navigate("/home");
-      } else if (user && email.length !== 0 && password.length !== 0) {
-        navigate("/dashboard/home");
-      } /* else if (email.includes("admin")) {
-        navigate("/dashboard/home");
-      } else {
-        setErrorMessage("Invalid Email");
-      } */
+        navigate("/quiz");
+      }
     } catch (error) {
       console.log(error);
       setErrorMessage(error.message);
@@ -60,7 +54,7 @@ const Login = () => {
               </p>
             </div>
             <Button
-              alt
+              secondaryAlt
               // onClick={() => {
               //   signIn(email, password);
               // }}
@@ -86,6 +80,7 @@ const Login = () => {
               </div>
             </Button>
             <Button
+              primary
               // onClick={() => {
               //   signIn(email, password);
               // }}
@@ -141,6 +136,7 @@ const Login = () => {
           </div>
           <div className="mb-4">
             <Input
+              secondary
               label="Email Address"
               required
               autoComplete="off"
@@ -155,6 +151,7 @@ const Login = () => {
           </div>
           <div className="mb-4">
             <Input
+              secondary
               label="Password"
               required
               autoComplete="off"
@@ -186,6 +183,7 @@ const Login = () => {
           </div>
 
           <Button
+            primary
             onClick={() => {
               signIn(email, password);
             }}

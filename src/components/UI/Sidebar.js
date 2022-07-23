@@ -189,7 +189,7 @@ const Sidebar = (props) => {
       {/* Mobile Sidebar */}
 
       {/* Desktop Sidebar */}
-      <div className="hidden md:block md:z-40 fixed mx-auto bg-primary-500">
+      <div className="hidden md:block md:z-40 fixed mx-auto bg-primary-500 border-r border-r-primary-100">
         <div className="hidden sm:flex sm:flex-col sm:gap-12 sm:text-3xl sm:min-h-full sm:max-w-72">
           <div className="w-full max-w-[280px]">
             <nav className="w-[17rem] p-5 h-screen justify-between flex flex-col">
@@ -298,10 +298,10 @@ const Sidebar = (props) => {
                       </Link>
                     </li>
                     <li className="">
-                      <Link to={"/business"}>
+                      <Link to={"/news"}>
                         <div
                           className={`px-3 py-[14px] ${
-                            location.pathname === "/business"
+                            location.pathname === "/news"
                               ? "text-secondary-300 bg-primary-100"
                               : "text-white"
                           } rounded flex items-center gap-3 hover:text-secondary-300 hover:bg-primary-100 transition-all duration-300`}
@@ -375,10 +375,10 @@ const Sidebar = (props) => {
                       </Link>
                     </li>
                     <li className="">
-                      <Link to={"/items"}>
+                      <Link to={"/login"}>
                         <div
                           className={`px-3 py-[14px] ${
-                            location.pathname === "/items"
+                            location.pathname === "/login"
                               ? "text-secondary-300 bg-primary-100"
                               : "text-white"
                           } rounded flex items-center gap-3 hover:text-secondary-300 hover:bg-primary-100 transition-all duration-300`}
