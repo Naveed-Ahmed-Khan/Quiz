@@ -14,7 +14,7 @@ export default function CategoriesQuiz() {
   return (
     <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-0 xl:py-6 sm:mx-auto ">
       <div className="">
-        <div className="mt-6 sm:mt-0 text-end">
+        <div className="hidden xl:block mt-6 sm:mt-0 text-end">
           <form className="relative flex items-center md:flex-row w-full sm:w-fit md:space-x-3 md:space-y-0 ">
             <input
               type="text"
@@ -37,17 +37,10 @@ export default function CategoriesQuiz() {
                 fill="white"
               />
             </svg>
-
-            {/* <button
-                className="flex-shrink-0 px-4  text-base font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
-                type="submit"
-              >
-                Filter
-              </button> */}
           </form>
         </div>
-        <div className="my-8 sm:flex items-center justify-between w-full">
-          <div className="flex items-center">
+        <div className="my-8 space-y-4 xl:space-y-0 xl:flex items-center justify-between w-full">
+          <div className="mb-6 sm:mb-0 flex items-center">
             <svg
               className="w-8 h-8 text-secondary-300"
               viewBox="0 0 34 34"
@@ -58,12 +51,12 @@ export default function CategoriesQuiz() {
               <path d="M25.3583 7.08325C25.6385 7.08443 25.912 7.16866 26.1443 7.32529C26.3767 7.48192 26.5573 7.70392 26.6634 7.96321C26.7696 8.22251 26.7965 8.50746 26.7407 8.78203C26.6849 9.0566 26.5489 9.30845 26.35 9.50575L18.8558 16.9999L26.35 24.4941C26.4828 24.6258 26.5882 24.7825 26.6601 24.9551C26.732 25.1278 26.769 25.3129 26.769 25.4999C26.769 25.687 26.732 25.8721 26.6601 26.0448C26.5882 26.2174 26.4828 26.3741 26.35 26.5058C26.0846 26.7696 25.7255 26.9177 25.3512 26.9177C24.977 26.9177 24.6179 26.7696 24.3525 26.5058L15.8525 18.0058C15.7197 17.8741 15.6143 17.7174 15.5424 17.5447C15.4705 17.3721 15.4334 17.1869 15.4334 16.9999C15.4334 16.8129 15.4705 16.6277 15.5424 16.4551C15.6143 16.2825 15.7197 16.1258 15.8525 15.9941L24.3525 7.49409C24.4849 7.36279 24.6418 7.25891 24.8145 7.18841C24.9871 7.11791 25.1719 7.08218 25.3583 7.08325Z" />
             </svg>
 
-            <h2 className="text-xxl sm:text-2xl text-primary-500 font-medium">
-              Categories(Quiz)
+            <h2 className="text-xl sm:text-2xl text-primary-500 font-medium">
+              Categories (Quiz)
             </h2>
           </div>
-          <div className="flex gap-4">
-            <div className="flex items-center gap-3">
+          <div className="sm:flex sm:flex-wrap gap-4">
+            <div className="mb-3 sm:mb-0 space-y-1 sm:space-y-0 sm:flex items-center gap-3">
               <label>Show Analytics for: </label>
               <Select>
                 <option>This week</option>
@@ -72,8 +65,8 @@ export default function CategoriesQuiz() {
                 <option>Last 30 days</option>
               </Select>
             </div>
-            <div className="flex items-center gap-3">
-              <label>Type</label>
+            <div className="mb-6 sm:mb-0 space-y-1 sm:space-y-0 sm:flex items-center gap-3">
+              <label>Type:</label>
               <Select>
                 <option>All</option>
                 {/* <option>This month</option>
@@ -83,87 +76,43 @@ export default function CategoriesQuiz() {
             </div>
           </div>
         </div>
-        <div className="h-[70vh] min-w-80 w-full inline-block shadow-2xl">
-          <div className="">
-            <div className="py-4 px-0 sm:px-4 w-full grid grid-cols-12 text-base text-left bg-primary-100">
-              <h3 className="col-span-1 ">#</h3>
-              <h3 className="col-span-10 ">Image</h3>
-              <h3 className="col-span-1">Action</h3>
-            </div>
-            <div className="h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 ">
-              {businesses.map((business) => {
-                let subscriptionRem = null;
-                if (business.activeSubscription) {
-                  subscriptionRem =
-                    business.activeSubscription.expirationDate
-                      .toDate()
-                      .getTime() - Date.now();
-                  console.log(new Date(subscriptionRem));
-                  subscriptionRem = new Date(subscriptionRem);
-                }
-                // console.log(subscriptionRem);
-                return (
-                  <div
-                    key={business.id}
-                    className={`w-full grid grid-cols-12 text-left hover:bg-primary-100 text-sm sm:text-base px-0 sm:px-4 sm:py-2 rounded${
-                      business.isDisabled ? "opacity-50" : "opacity-100"
-                    } group border-b border-b-primary-100 text-secondary-100 items-center`}
-                  >
-                    <div className="col-span-1 flex items-center">
-                      <div className="h-5 w-5 bg-primary-100 rounded group-hover:bg-secondary-300" />
-                    </div>
-                    <div className="col-span-10 flex items-center gap-2">
-                      <img
-                        className="object-contain h-8"
-                        src={profile}
-                        alt=""
-                      />
-                      <p className="py-3 text-left">{business.name}</p>
-                    </div>
-
-                    <div className="col-span-1 text-center">...</div>
-                    {/* <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1 py-1">
-                      <button
-                        onClick={async () => {
-                          if (business.isDisabled) {
-                            await updateDoc(
-                              doc(collection(db, "users"), business.id),
-                              {
-                                isDisabled: false,
-                              }
-                            );
-                            setDisabled(false);
-                          } else {
-                            await updateDoc(
-                              doc(collection(db, "users"), business.id),
-                              {
-                                isDisabled: true,
-                              }
-                            );
-                            setDisabled(true);
-                          }
-                          updateCheck();
-                        }}
-                        className="text-xs sm:text-sm border border-white text-white font-normal rounded-full sm:rounded-md px-2 py-1 bg-primary-500 hover:bg-primary-400"
-                      >
-                        {business.isDisabled ? "Enable" : "Disable"}
-                      </button>
-                      <button
-                        onClick={async () => {
-                          await deleteDoc(
-                            doc(collection(db, "users"), business.id)
-                          );
-                          updateCheck();
-                        }}
-                        className="text-xs sm:text-sm hover:underline hover:underline-offset-2 text-red-500"
-                      >
-                        Delete
-                      </button>
-                    </div> */}
+        <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-600 w-full h-[70vh] shadow-2xl">
+          <div className="xl:w-full py-4 px-3 sm:px-4 w-full grid grid-cols-12 text-base text-left bg-primary-100">
+            <h3 className="col-span-2">#</h3>
+            <h3 className="col-span-7">Image</h3>
+            <h3 className="col-span-3 text-center">Action</h3>
+          </div>
+          <div className="xl:w-full h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600">
+            {businesses.map((business) => {
+              let subscriptionRem = null;
+              if (business.activeSubscription) {
+                subscriptionRem =
+                  business.activeSubscription.expirationDate
+                    .toDate()
+                    .getTime() - Date.now();
+                console.log(new Date(subscriptionRem));
+                subscriptionRem = new Date(subscriptionRem);
+              }
+              // console.log(subscriptionRem);
+              return (
+                <div
+                  key={business.id}
+                  className={`w-full grid grid-cols-12 text-left hover:bg-primary-100 text-sm sm:text-base px-3 py-3 sm:px-4 sm:py-2 rounded${
+                    business.isDisabled ? "opacity-50" : "opacity-100"
+                  } group border-b border-b-primary-100 text-secondary-100 items-center`}
+                >
+                  <div className="col-span-2 flex items-center">
+                    <div className="h-5 w-5 bg-primary-100 rounded group-hover:bg-secondary-300" />
                   </div>
-                );
-              })}
-            </div>
+                  <div className="col-span-7 flex items-center gap-2">
+                    <img className="object-contain h-8" src={profile} alt="" />
+                    <p className="py-3 text-left">{business.name}</p>
+                  </div>
+
+                  <div className="col-span-3 text-center">...</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

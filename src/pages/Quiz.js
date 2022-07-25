@@ -37,16 +37,9 @@ export default function Quiz() {
                 fill="white"
               />
             </svg>
-
-            {/* <button
-                className="flex-shrink-0 px-4  text-base font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
-                type="submit"
-              >
-                Filter
-              </button> */}
           </form>
         </div>
-        <div className="my-8 sm:flex items-center justify-between w-full">
+        <div className="my-8 space-y-4 xl:space-y-0 xl:flex items-center justify-between w-full">
           <div className="mb-6 sm:mb-0 flex items-center">
             <svg
               className="w-8 h-8 text-secondary-300"
@@ -62,7 +55,7 @@ export default function Quiz() {
               Quiz
             </h2>
           </div>
-          <div className="sm:flex gap-4">
+          <div className="sm:flex sm:flex-wrap gap-4">
             <div className="mb-3 sm:mb-0 space-y-1 sm:space-y-0 sm:flex items-center gap-3">
               <label>Show Analytics for: </label>
               <Select>
@@ -81,10 +74,11 @@ export default function Quiz() {
                 <option>Last 30 days</option> */}
               </Select>
             </div>
-            <button className="w-full sm:w-44 px-3 py-3 xl:py-2 flex items-center justify-between bg-secondary-300 rounded">
-              <p onClick={() => navigate("/add-quiz")} className="text-sm">
-                Add Quiz
-              </p>
+            <button
+              onClick={() => navigate("/add-quiz")}
+              className="w-full sm:w-44 px-3 py-3 xl:py-2 flex items-center justify-between bg-secondary-300 rounded"
+            >
+              <p className="text-sm">Add Quiz</p>
               <svg
                 className="w-4 h-4 text-white"
                 viewBox="0 0 17 17"
@@ -96,62 +90,57 @@ export default function Quiz() {
             </button>
           </div>
         </div>
-        <div className="h-[70vh] w-full inline-block shadow-2xl">
-          <div className="">
-            <div className="py-4 px-0 sm:px-4 w-full grid grid-cols-12 text-base text-left bg-primary-100">
-              <h3 className="col-span-1 ">ID</h3>
-              <h3 className="col-span-1 ">Image</h3>
-              <h3 className="col-span-2 ">Title</h3>
-              <h3 className="col-span-3 ">Paragraph</h3>
-              <h3 className="col-span-2 ">Author</h3>
-              <h3 className="col-span-2 ">Rating</h3>
-              <h3 className="col-span-1 text-center">Action</h3>
-            </div>
-            <div className="h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 ">
-              {businesses.map((business) => {
-                let subscriptionRem = null;
-                if (business.activeSubscription) {
-                  subscriptionRem =
-                    business.activeSubscription.expirationDate
-                      .toDate()
-                      .getTime() - Date.now();
-                  console.log(new Date(subscriptionRem));
-                  subscriptionRem = new Date(subscriptionRem);
-                }
-                // console.log(subscriptionRem);
-                return (
-                  <div
-                    key={business.id}
-                    className={`w-full grid grid-cols-12 text-left hover:bg-primary-100 text-sm sm:text-base px-0 sm:px-4 sm:py-2 rounded${
-                      business.isDisabled ? "opacity-50" : "opacity-100"
-                    } border-b border-b-primary-100 text-secondary-100 items-center`}
-                  >
-                    <div className="col-span-1">#1234</div>
-                    <div className="col-span-1 flex items-center gap-2">
-                      <img
-                        className="object-contain h-8"
-                        src={profile}
-                        alt=""
-                      />
-                      {/* <p className="py-3 text-left">{business.name}</p> */}
-                    </div>
-                    <div className="col-span-2">{business.name}</div>
-                    {subscriptionRem ? (
-                      <p className="col-span-3 py-3 text-left">
-                        {subscriptionRem.getDate()} days:{" "}
-                        {business.activeSubscription.name}
-                      </p>
-                    ) : (
-                      <p className="col-span-3 py-3 text-left">
-                        {"Not subscribed"}
-                      </p>
-                    )}
-                    <div className="col-span-2">Thomas Lee</div>
-                    <div className="col-span-2">
-                      <Rating />
-                    </div>
-                    <div className="col-span-1 text-center">...</div>
-                    {/* <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1 py-1">
+        <div className="overflow-x-scroll scrollbar-thin scrollbar-thumb-neutral-600 w-full h-[70vh] shadow-2xl">
+          <div className="min-w-[760px] xl:w-full py-4 px-3 sm:px-4 grid grid-cols-12 text-base text-left bg-primary-100">
+            <h3 className="col-span-1 ">ID</h3>
+            <h3 className="col-span-1 ">Image</h3>
+            <h3 className="col-span-2 ">Title</h3>
+            <h3 className="col-span-3 ">Paragraph</h3>
+            <h3 className="col-span-2 ">Author</h3>
+            <h3 className="col-span-2 ">Rating</h3>
+            <h3 className="col-span-1 text-center">Action</h3>
+          </div>
+          <div className="min-w-[760px] xl:w-full h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600">
+            {businesses.map((business) => {
+              let subscriptionRem = null;
+              if (business.activeSubscription) {
+                subscriptionRem =
+                  business.activeSubscription.expirationDate
+                    .toDate()
+                    .getTime() - Date.now();
+                console.log(new Date(subscriptionRem));
+                subscriptionRem = new Date(subscriptionRem);
+              }
+              // console.log(subscriptionRem);
+              return (
+                <div
+                  key={business.id}
+                  className={`w-full grid grid-cols-12 text-left hover:bg-primary-100 text-sm sm:text-base px-3 py-3 sm:px-4 sm:py-2 rounded${
+                    business.isDisabled ? "opacity-50" : "opacity-100"
+                  } border-b border-b-primary-100 text-secondary-100 items-center`}
+                >
+                  <div className="col-span-1">#1234</div>
+                  <div className="col-span-1 flex items-center gap-2">
+                    <img className="object-contain h-8" src={profile} alt="" />
+                    {/* <p className="py-3 text-left">{business.name}</p> */}
+                  </div>
+                  <div className="col-span-2">{business.name}</div>
+                  {subscriptionRem ? (
+                    <p className="col-span-3 py-3 text-left">
+                      {subscriptionRem.getDate()} days:{" "}
+                      {business.activeSubscription.name}
+                    </p>
+                  ) : (
+                    <p className="col-span-3 py-3 text-left">
+                      {"Not subscribed"}
+                    </p>
+                  )}
+                  <div className="col-span-2">Thomas Lee</div>
+                  <div className="col-span-2">
+                    <Rating />
+                  </div>
+                  <div className="col-span-1 text-center">...</div>
+                  {/* <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1 py-1">
                       <button
                         onClick={async () => {
                           if (business.isDisabled) {
@@ -189,10 +178,9 @@ export default function Quiz() {
                         Delete
                       </button>
                     </div> */}
-                  </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

@@ -38,13 +38,6 @@ export default function AddQuiz() {
                 fill="white"
               />
             </svg>
-
-            {/* <button
-                className="flex-shrink-0 px-4  text-base font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
-                type="submit"
-              >
-                Filter
-              </button> */}
           </form>
         </div>
         <div className="my-8 sm:flex items-center justify-between w-full">
@@ -65,77 +58,77 @@ export default function AddQuiz() {
           </div>
         </div>
       </section>
-      <section className="flex justify-between gap-20">
+      <section className="xl:flex justify-between gap-8">
         <div className="flex-auto">
-          <div className="grid grid-cols-12 gap-y-8">
-            <div className="col-span-5 pb-8 border-b border-b-primary-100">
+          <div className="grid grid-cols-12 gap-y-3 sm:gap-y-8">
+            <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Quiz Title</label>
-              <p className="mt-2 text-xs text-white text-opacity-50">
+              <p className="mt-1 sm:mt-2 text-xs text-white text-opacity-50">
                 Enter quiz title
               </p>
             </div>
-            <div className="col-span-7 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <Input placeholder={"Type something ..."} />
             </div>
-            <div className="col-span-5 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Paragraph</label>
               <p className="mt-2 text-xs text-white text-opacity-50">
                 Enter a paragraph upto 500 characters
               </p>
             </div>
-            <div className="col-span-7 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <TextArea rows={6} placeholder={"Type something ..."} />
             </div>
-            <div className="col-span-5 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Answer Text</label>
               <p className="mt-2 text-xs text-white text-opacity-50">
                 Enter answer text
               </p>
             </div>
-            <div className="col-span-7 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <Input placeholder={"Type something ..."} />
             </div>
-            <div className="col-span-5 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Image</label>
               <p className="mt-2 text-xs text-white text-opacity-50">
                 Upload image of your quiz
               </p>
             </div>
-            <div className="col-span-7 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <Input placeholder={"Type something ..."} />
             </div>
-            <div className="col-span-5 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Category</label>
               <p className="mt-2 text-xs text-white text-opacity-50">
                 Choose the right category
               </p>
             </div>
-            <div className="col-span-7 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <Input placeholder={"Type something ..."} />
             </div>
-            <div className="col-span-5 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Rating</label>
               <p className="mt-2 text-xs text-white text-opacity-50">
                 Select the rating and enter comment
               </p>
             </div>
-            <div className="col-span-7 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <div className="px-6 py-4 mb-2 bg-primary-100 rounded w-full">
                 <Rating />
               </div>
               <TextArea rows={6} placeholder={"Type something ..."} />
             </div>
-            <div className="col-span-5 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Answer</label>
               <p className="mt-2 text-xs text-white text-opacity-50">
                 Choose the right answer
               </p>
             </div>
-            <div className="col-span-7 pb-8 border-b border-b-primary-100">
+            <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <Input placeholder={"Type something ..."} />
             </div>
           </div>
-          <div className="mt-16 flex gap-8">
+          <div className="hidden xl:flex mt-16 mb-8 gap-8">
             <button className="w-full px-8 py-3 rounded bg-primary-100">
               Cancel
             </button>
@@ -147,20 +140,33 @@ export default function AddQuiz() {
             </button>
           </div>
         </div>
-        <div className="">
+        <div className="mt-8 xl:mt-0">
           <h3 className="font-bold">Preview of the quiz</h3>
           <p className="text-xs text-white text-opacity-50">Live Preview</p>
-          <div className="mt-6 p-11 bg-primary-100">
-            <img src={phone3d} alt="" />
-            <div className="pt-14 flex justify-center gap-4">
-              <button className="px-14 py-1 bg-secondary-300 rounded-md">
+          <div className=" mt-6 p-6 sm:p-11 bg-primary-100">
+            <div className="flex justify-center">
+              <img className="object-contain " src={phone3d} alt="" />
+            </div>
+            <div className="w-full pt-14 flex justify-center gap-4">
+              <button className="w-full sm:w-fit sm:px-14 py-1 bg-secondary-300 rounded-md">
                 3d
               </button>
-              <button className="px-14 py-1 bg-primary-200 rounded-md">
+              <button className="w-full sm:w-fit sm:px-14 py-1 bg-primary-200 rounded-md">
                 2d
               </button>
             </div>
           </div>
+        </div>
+        <div className="flex xl:hidden mt-16 mb-8 gap-8">
+          <button className="w-full px-8 py-3 rounded bg-primary-100">
+            Cancel
+          </button>
+          <button
+            onClick={() => setShowModal(true)}
+            className="w-full px-8 py-3 rounded bg-secondary-300"
+          >
+            Save
+          </button>
         </div>
       </section>
       <BackdropModal

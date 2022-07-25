@@ -29,7 +29,7 @@ export default function ForgetPassword() {
 
   return (
     <div className="min-h-screen xl:flex xl:justify-center mx-auto md:max-w-screen-md xl:max-w-none bg-primary-200">
-      <div className="pt-[5vh] sm:pt-[10vh] px-5 w-full flex items-center xl:w-5/12 space-y-5">
+      <div className="pt-[5vh] sm:pt-[10vh] xl:pt-0 px-5 w-full flex items-center xl:w-5/12 space-y-5">
         <div className="xl:max-w-md mx-auto my-auto  ">
           <div className="space-y-5 xl:mb-8">
             <div className="mb-6">
