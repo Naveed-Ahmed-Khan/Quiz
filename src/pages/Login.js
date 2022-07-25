@@ -1,26 +1,40 @@
 import Backgroundlogin from "../components/UI/Backgroundlogin";
 import Button from "../components/UI/Button";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
 import { useAuth } from "../contexts/AuthContext";
 import Input from "../components/UI/Input";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [localData, setLocalData] = useState(null);
+  const [email, setEmail] = useState(localData?.email || "");
+  const [password, setPassword] = useState(localData?.email || "");
+  const [rememberMe, setRememberMe] = useState(localData ? true : false);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
   const { login } = useAuth();
+
+  useEffect(() => {
+    const checkLocalStorage = () => {
+      const data = JSON.parse(localStorage.getItem("user.quizapp"));
+      console.log(data);
+      data ? setLocalData(data) : setLocalData(null);
+    };
+    checkLocalStorage();
+  }, []);
 
   const signIn = async (email, password) => {
     try {
       setErrorMessage("");
-      const { user } = await login(email, password);
-      console.log(user);
-      if (user.email === "admin@gmail.com") {
+      if (email === "admin@gmail.com") {
+        await login(email, password);
+        rememberMe &&
+          localStorage.setItem(
+            "user.quizapp",
+            JSON.stringify({ email, password })
+          );
         navigate("/quiz");
       }
     } catch (error) {
@@ -41,7 +55,7 @@ const Login = () => {
       // alert("invalid");
     }
   }; */
-
+  console.log(rememberMe);
   return (
     <div className="min-h-screen xl:flex xl:justify-center mx-auto md:max-w-screen-md xl:max-w-none bg-primary-200">
       <div className="w-full flex items-center xl:w-5/12 space-y-5">
@@ -170,12 +184,12 @@ const Login = () => {
               <input
                 className="text-secondary-200 bg-primary-100 rounded w-5 h-5 transition-all duration-300"
                 type="checkbox"
-                name=""
-                id=""
+                checked={rememberMe}
+                onChange={() => setRememberMe((prev) => !prev)}
               />
               <label className="text-base">Remember Information</label>
             </div>
-            <Link to="/signin">
+            <Link to="/forget-password">
               <p className="text-base text-secondary-200 hover:underline hover:underline-offset-2">
                 Forgot Password?
               </p>
@@ -184,7 +198,7 @@ const Login = () => {
 
           <Button
             primary
-            onClick={() => {
+            onClick={async () => {
               signIn(email, password);
             }}
             fullWidth

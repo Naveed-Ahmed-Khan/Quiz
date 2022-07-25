@@ -1,12 +1,13 @@
 // import { onAuthStateChanged, signOut } from "firebase/auth";
-
 // import { auth } from "../api/firebase-config";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import Backdrop from "./Backdrop";
 import admin from "../../assets/images/admin.png";
+import { useState } from "react";
 
 const Sidebar = (props) => {
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { logout } = useAuth();
 
@@ -255,10 +256,10 @@ const Sidebar = (props) => {
                       </Link>
                     </li>
                     <li className="">
-                      <Link to={"/items"}>
+                      <Link to={"/rating"}>
                         <div
                           className={`px-3 py-[14px] ${
-                            location.pathname === "/items"
+                            location.pathname === "/rating"
                               ? "text-secondary-300 bg-primary-100"
                               : "text-white"
                           } rounded flex items-center gap-3 hover:text-secondary-300 hover:bg-primary-100 transition-all duration-300`}
@@ -321,14 +322,18 @@ const Sidebar = (props) => {
                       </Link>
                     </li>
                     <li className="">
-                      <Link to={"/login"}>
+                      <button
+                        onClick={() => {
+                          setIsOpen((prev) => !prev);
+                        }}
+                        className="w-full"
+                      >
                         <div
                           className={`px-3 py-[14px] ${
-                            location.pathname === "/login"
+                            location.pathname.includes("categories")
                               ? "text-secondary-300 bg-primary-100"
                               : "text-white"
                           } rounded flex items-center gap-3 hover:text-secondary-300 hover:bg-primary-100 transition-all duration-300`}
-                          // onClick={() => logout()}
                         >
                           <svg
                             className="w-5 h-5"
@@ -342,6 +347,35 @@ const Sidebar = (props) => {
                             <path d="M14.166 9.20874H12.041C11.2896 9.20874 10.5691 9.50722 10.0378 10.0385C9.50648 10.5698 9.20801 11.2904 9.20801 12.0417V14.1667C9.20801 14.9181 9.50648 15.6387 10.0378 16.17C10.5691 16.7013 11.2896 16.9997 12.041 16.9997H14.166C14.9174 16.9997 15.638 16.7013 16.1692 16.17C16.7005 15.6387 16.999 14.9181 16.999 14.1667V12.0417C16.999 11.2904 16.7005 10.5698 16.1692 10.0385C15.638 9.50722 14.9174 9.20874 14.166 9.20874ZM15.583 14.1667C15.583 14.5426 15.4337 14.903 15.168 15.1687C14.9022 15.4344 14.5418 15.5837 14.166 15.5837H12.041C11.6652 15.5837 11.3048 15.4344 11.039 15.1687C10.7733 14.903 10.624 14.5426 10.624 14.1667V12.0417C10.624 11.6659 10.7733 11.3055 11.039 11.0398C11.3048 10.774 11.6652 10.6247 12.041 10.6247H14.166C14.5418 10.6247 14.9022 10.774 15.168 11.0398C15.4337 11.3055 15.583 11.6659 15.583 12.0417V14.1667Z" />
                           </svg>
                           <p className="text-sm font-medium">Categories</p>
+                        </div>
+                      </button>
+                    </li>
+                    <li className="">
+                      <Link to={"/categories-quiz"}>
+                        <div
+                          className={`pl-8 py-[14px] rounded flex items-center gap-3 text-white hover:bg-primary-100 transition-all duration-300`}
+                          // onClick={() => logout()}
+                        >
+                          {location.pathname === "/categories-quiz" ? (
+                            <div className="w-2 h-2 bg-white rounded-full" />
+                          ) : (
+                            <div className="w-2 h-2 border border-white rounded-full" />
+                          )}
+                          <p className="text-sm font-medium">Quiz</p>
+                        </div>
+                      </Link>
+                    </li>
+                    <li className="">
+                      <Link to={"/categories-news"}>
+                        <div
+                          className={`pl-8 py-[14px] rounded flex items-center gap-3 text-white hover:bg-primary-100 transition-all duration-300`}
+                        >
+                          {location.pathname === "/categories-news" ? (
+                            <div className="w-2 h-2 bg-white rounded-full" />
+                          ) : (
+                            <div className="w-2 h-2 border border-white rounded-full" />
+                          )}
+                          <p className="text-sm font-medium">News</p>
                         </div>
                       </Link>
                     </li>
