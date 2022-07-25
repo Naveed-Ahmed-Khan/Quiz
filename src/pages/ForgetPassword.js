@@ -29,7 +29,7 @@ export default function ForgetPassword() {
 
   return (
     <div className="min-h-screen xl:flex xl:justify-center mx-auto md:max-w-screen-md xl:max-w-none bg-primary-200">
-      <div className="w-full flex items-center xl:w-5/12 space-y-5">
+      <div className="pt-[5vh] sm:pt-[10vh] px-5 w-full flex items-center xl:w-5/12 space-y-5">
         <div className="xl:max-w-md mx-auto my-auto  ">
           <div className="space-y-5 xl:mb-8">
             <div className="mb-6">
@@ -99,8 +99,7 @@ export default function ForgetPassword() {
           >
             <p className="text-[.9em] xl:text-[1.2em]">Send Reset Email</p>
           </Button>
-          <div className="mt-4 flex items-center gap-4">
-            <p className="text-base">Already a member?</p>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
             <Link
               to={"/login"}
               className="text-secondary-200 text-base cursor-pointer"
@@ -110,7 +109,7 @@ export default function ForgetPassword() {
           </div>
         </div>
       </div>
-      <div className="relative overflow-clip pt-[7vh] bg-primary-100 xl:w-7/12 xl:pl-24 pb-4 xl:pb-0">
+      <div className="hidden xl:block relative overflow-clip pt-[7vh] bg-primary-100 xl:w-7/12 xl:pl-24 pb-4 xl:pb-0">
         <p className="px-4 sm:px-0 pt-2 xl:pt-8 xl:text-left text-base sm:text-lg xl:text-xl font-rublik font-medium">
           "Exquisite newspaper attending on certainty oh suspicion of."
         </p>

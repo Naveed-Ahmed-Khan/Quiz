@@ -58,7 +58,7 @@ const Login = () => {
   console.log(rememberMe);
   return (
     <div className="min-h-screen xl:flex xl:justify-center mx-auto md:max-w-screen-md xl:max-w-none bg-primary-200">
-      <div className="w-full flex items-center xl:w-5/12 space-y-5">
+      <div className="pt-[5vh] sm:pt-[10vh] px-5 w-full flex items-center xl:w-5/12 space-y-5">
         <div className="xl:max-w-md mx-auto my-auto  ">
           <div className="space-y-5 xl:mb-8">
             <div className="mb-6">
@@ -179,7 +179,7 @@ const Login = () => {
             />
           </div>
 
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex flex-wrap gap-3 items-center justify-between">
             <div className="flex items-center gap-3">
               <input
                 className="text-secondary-200 bg-primary-100 rounded w-5 h-5 transition-all duration-300"
@@ -218,7 +218,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <div className="relative overflow-clip pt-[7vh] bg-primary-100 xl:w-7/12 xl:pl-24 pb-4 xl:pb-0">
+      <div className="hidden xl:block relative overflow-clip pt-[7vh] bg-primary-100 xl:w-7/12 xl:pl-24 pb-4 xl:pb-0">
         <p className="px-4 sm:px-0 pt-2 xl:pt-8 xl:text-left text-base sm:text-lg xl:text-xl font-rublik font-medium">
           "Exquisite newspaper attending on certainty oh suspicion of."
         </p>
