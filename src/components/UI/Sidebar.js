@@ -153,6 +153,7 @@ const Sidebar = (props) => {
                     </div>
                   </Link>
                 </li>
+
                 <li className="">
                   <Link
                     onClick={() => {
@@ -260,10 +261,10 @@ const Sidebar = (props) => {
               </p>
               <ul className="space-y-1">
                 <li className="">
-                  <Link to={"/home"}>
+                  <Link to={"/settings"}>
                     <div
                       className={`px-3 py-[14px] ${
-                        location.pathname === "/home"
+                        location.pathname === "/settings"
                           ? "text-secondary-300 bg-primary-100"
                           : "text-white"
                       } rounded flex items-center gap-3 hover:text-secondary-300 hover:bg-primary-100 transition-all duration-300`}
@@ -515,10 +516,10 @@ const Sidebar = (props) => {
                   </p>
                   <ul className="space-y-1">
                     <li className="">
-                      <Link to={"/home"}>
+                      <Link to={"/settings"}>
                         <div
                           className={`px-3 py-[14px] ${
-                            location.pathname === "/home"
+                            location.pathname === "/settings"
                               ? "text-secondary-300 bg-primary-100"
                               : "text-white"
                           } rounded flex items-center gap-3 hover:text-secondary-300 hover:bg-primary-100 transition-all duration-300`}

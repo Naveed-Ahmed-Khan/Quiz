@@ -5,23 +5,24 @@ import Input from "../components/UI/Input";
 import TextArea from "../components/UI/TextArea";
 import Rating from "../components/UI/Rating";
 import Button from "../components/UI/Button";
-import BackdropModal from "../components/UI/BackdropModal";
 import { useNavigate } from "react-router-dom";
+import BackdropModal from "../components/UI/BackdropModal";
+import { useStateContext } from "../contexts/ContextProvider";
 
-export default function AddQuiz() {
+export default function EditNews() {
+  const { selectedItemToEdit, selectItemToEdit } = useStateContext();
+
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [filterValue, setFilterValue] = useState("");
-  const [quizTitle, setQuizTitle] = useState("");
+  const [quizTitle, setQuizTitle] = useState(selectedItemToEdit?.name || "");
   const [paragraph, setParagraph] = useState("");
   const [answertext, setAnswertext] = useState("");
   const [image, setImage] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const [category, setCategory] = useState("");
-  const [feedback, setFeedback] = useState("");
-  const [rating, setRating] = useState(null);
-  const [answer, setAnswer] = useState("");
-
+  const [author, setAuthor] = useState("");
+  const [date, setDate] = useState("");
   return (
     <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-6 xl:py-8 sm:mx-auto">
       <section>
@@ -48,6 +49,13 @@ export default function AddQuiz() {
                 fill="white"
               />
             </svg>
+
+            {/* <button
+                className="flex-shrink-0 px-4  text-base font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
+                type="submit"
+              >
+                Filter
+              </button> */}
           </form>
         </div>
         <div className="my-8 sm:flex items-center justify-between w-full">
@@ -63,7 +71,7 @@ export default function AddQuiz() {
             </svg>
 
             <h2 className="text-xxl sm:text-2xl text-primary-500 font-medium">
-              Add Quiz
+              Edit News
             </h2>
           </div>
         </div>
@@ -72,9 +80,9 @@ export default function AddQuiz() {
         <div className="flex-auto">
           <div className="grid grid-cols-12 gap-y-3 sm:gap-y-8">
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
-              <label className="">Quiz Title</label>
-              <p className="mt-1 sm:mt-2 text-xs text-white text-opacity-50">
-                Enter quiz title
+              <label className="">News Title</label>
+              <p className="mt-2 text-xs text-white text-opacity-50">
+                Enter news title
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
@@ -118,9 +126,9 @@ export default function AddQuiz() {
               />
             </div>
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
-              <label className="">Image</label>
+              <label className="">Thumbnail</label>
               <p className="mt-2 text-xs text-white text-opacity-50">
-                Upload image of your quiz
+                Upload thumbnail
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
@@ -148,47 +156,39 @@ export default function AddQuiz() {
               />
             </div>
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
-              <label className="">Rating</label>
+              <label className="">Author</label>
               <p className="mt-2 text-xs text-white text-opacity-50">
-                Select the rating and enter comment
-              </p>
-            </div>
-            <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <div className="px-6 py-4 mb-2 bg-primary-100 rounded w-full">
-                <Rating
-                  isEditable={true}
-                  rating={rating}
-                  setRating={setRating}
-                />
-              </div>
-              <TextArea
-                rows={6}
-                placeholder={"Type something ..."}
-                value={feedback}
-                onChange={(e) => {
-                  setFeedback(e.target.value);
-                }}
-              />
-            </div>
-            <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
-              <label className="">Answer</label>
-              <p className="mt-2 text-xs text-white text-opacity-50">
-                Choose the right answer
+                Enter the author
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <Input
                 placeholder={"Type something ..."}
-                value={answer}
+                value={author}
                 onChange={(e) => {
-                  setAnswer(e.target.value);
+                  setAuthor(e.target.value);
+                }}
+              />
+            </div>
+            <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
+              <label className="">Date</label>
+              <p className="mt-2 text-xs text-white text-opacity-50">
+                Enter the date
+              </p>
+            </div>
+            <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
+              <Input
+                placeholder={"Type something ..."}
+                value={date}
+                onChange={(e) => {
+                  setDate(e.target.value);
                 }}
               />
             </div>
           </div>
           <div className="hidden xl:flex mt-16 mb-8 gap-8">
             <button
-              onClick={() => navigate("/quiz")}
+              onClick={() => navigate("/news")}
               className="w-full px-8 py-3 rounded bg-primary-100"
             >
               Cancel
@@ -220,7 +220,7 @@ export default function AddQuiz() {
         </div>
         <div className="flex xl:hidden mt-16 mb-8 gap-8">
           <button
-            onClick={() => navigate("/quiz")}
+            onClick={() => navigate("/news")}
             className="w-full px-8 py-3 rounded bg-primary-100"
           >
             Cancel
@@ -250,7 +250,7 @@ export default function AddQuiz() {
               type={"button"}
               onClick={() => {
                 setShowModal(false);
-                navigate("/quiz");
+                navigate("/news");
               }}
             >
               Yes

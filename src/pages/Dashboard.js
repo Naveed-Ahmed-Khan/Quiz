@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import BackgroundDashboard from "../components/UI/BackgroundDashboard";
-import DetailsSidebar from "../components/UI/DetailsSidebar";
-// import { Outlet } from "react-router-dom";
 import Navbar from "../components/UI/Navbar";
 import Sidebar from "../components/UI/Sidebar";
-// import HomeBackground from "../components/HomeBackground";
-// import { useStateContext } from "../contexts/ContextProvider";
 
 const Dashboard = () => {
-  // const { unReadMessages } = useStateContext();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [showBackdrop, setShowBackdrop] = useState(false);
 
   return (
@@ -25,14 +18,12 @@ const Dashboard = () => {
         setIsChatOpen={setIsChatOpen}
         isChatOpen={isChatOpen}
       />
-
       <Sidebar
         open={open}
         setOpen={setOpen}
         showBackdrop={showBackdrop}
         setShowBackdrop={setShowBackdrop}
       />
-
       <div className="flex-auto pt-14 md:pt-0 md:ml-[17rem] relative overflow-auto ">
         <Outlet />
       </div>

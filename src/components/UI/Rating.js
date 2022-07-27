@@ -1,95 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default function Rating() {
+export default function Rating({ isEditable, rating, setRating }) {
+  const [hover, setHover] = useState(null);
   return (
-    <div>
-      <ul class="flex">
-        <li>
-          <svg
-            ariaHidden="true"
-            focusable="false"
-            dataPrefix="fas"
-            dataIcon="star"
-            class="w-4 text-yellow-500 mr-1"
-            role="img"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 576 512"
-          >
-            <path
-              fill="currentColor"
-              d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"
-            ></path>
-          </svg>
-        </li>
-        <li>
-          <svg
-            ariaHidden="true"
-            focusable="false"
-            dataPrefix="fas"
-            dataIcon="star"
-            class="w-4 text-yellow-500 mr-1"
-            role="img"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 576 512"
-          >
-            <path
-              fill="currentColor"
-              d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"
-            ></path>
-          </svg>
-        </li>
-        <li>
-          <svg
-            ariaHidden="true"
-            focusable="false"
-            dataPrefix="fas"
-            dataIcon="star"
-            class="w-4 text-yellow-500 mr-1"
-            role="img"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 576 512"
-          >
-            <path
-              fill="currentColor"
-              d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"
-            ></path>
-          </svg>
-        </li>
-        <li>
-          <svg
-            ariaHidden="true"
-            focusable="false"
-            dataPrefix="far"
-            dataIcon="star"
-            class="w-4 text-yellow-500 mr-1"
-            role="img"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 576 512"
-          >
-            <path
-              fill="currentColor"
-              d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"
-            ></path>
-          </svg>
-        </li>
-        <li>
-          <svg
-            ariaHidden="true"
-            focusable="false"
-            dataPrefix="far"
-            dataIcon="star"
-            class="w-4 text-yellow-500"
-            role="img"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 576 512"
-          >
-            <path
-              fill="currentColor"
-              d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"
-            ></path>
-          </svg>
-        </li>
-      </ul>
+    <div className="flex">
+      {[...Array(5)].map((star, i) => {
+        const ratingValue = i + 1;
+        return (
+          <label key={i}>
+            <input
+              className="hidden"
+              type="radio"
+              name="rating"
+              value={ratingValue}
+              onClick={() => {
+                isEditable && setRating(ratingValue);
+              }}
+            />
+            <div
+              onMouseEnter={() => isEditable && setHover(ratingValue)}
+              onMouseLeave={() => isEditable && setHover(null)}
+            >
+              <svg
+                className={`w-5 h-5 text-yellow-500 mr-1
+                ${isEditable && "cursor-pointer"}
+                ${
+                  ratingValue <= (hover || rating)
+                    ? "opacity-100"
+                    : "opacity-40"
+                }`}
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            </div>
+          </label>
+        );
+      })}
     </div>
   );
 }

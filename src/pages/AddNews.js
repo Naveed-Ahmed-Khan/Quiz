@@ -12,6 +12,14 @@ export default function AddNews() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [filterValue, setFilterValue] = useState("");
+  const [quizTitle, setQuizTitle] = useState("");
+  const [paragraph, setParagraph] = useState("");
+  const [answertext, setAnswertext] = useState("");
+  const [image, setImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
+  const [category, setCategory] = useState("");
+  const [author, setAuthor] = useState("");
+  const [date, setDate] = useState("");
   return (
     <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-6 xl:py-8 sm:mx-auto">
       <section>
@@ -75,7 +83,13 @@ export default function AddNews() {
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <Input placeholder={"Type something ..."} />
+              <Input
+                placeholder={"Type something ..."}
+                value={quizTitle}
+                onChange={(e) => {
+                  setQuizTitle(e.target.value);
+                }}
+              />
             </div>
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Paragraph</label>
@@ -84,7 +98,14 @@ export default function AddNews() {
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <TextArea rows={6} placeholder={"Type something ..."} />
+              <TextArea
+                rows={6}
+                placeholder={"Type something ..."}
+                value={paragraph}
+                onChange={(e) => {
+                  setParagraph(e.target.value);
+                }}
+              />
             </div>
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Answer Text</label>
@@ -93,7 +114,13 @@ export default function AddNews() {
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <Input placeholder={"Type something ..."} />
+              <Input
+                placeholder={"Type something ..."}
+                value={answertext}
+                onChange={(e) => {
+                  setAnswertext(e.target.value);
+                }}
+              />
             </div>
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Thumbnail</label>
@@ -102,7 +129,13 @@ export default function AddNews() {
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <Input placeholder={"Type something ..."} />
+              <Input
+                placeholder={"Type something ..."}
+                value={selectedImage}
+                onChange={(e) => {
+                  setSelectedImage(e.target.files[0]);
+                }}
+              />
             </div>
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Category</label>
@@ -111,7 +144,13 @@ export default function AddNews() {
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <Input placeholder={"Type something ..."} />
+              <Input
+                placeholder={"Type something ..."}
+                value={category}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                }}
+              />
             </div>
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Author</label>
@@ -120,7 +159,13 @@ export default function AddNews() {
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <Input placeholder={"Type something ..."} />
+              <Input
+                placeholder={"Type something ..."}
+                value={author}
+                onChange={(e) => {
+                  setAuthor(e.target.value);
+                }}
+              />
             </div>
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Date</label>
@@ -129,11 +174,20 @@ export default function AddNews() {
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <Input placeholder={"Type something ..."} />
+              <Input
+                placeholder={"Type something ..."}
+                value={date}
+                onChange={(e) => {
+                  setDate(e.target.value);
+                }}
+              />
             </div>
           </div>
           <div className="hidden xl:flex mt-16 mb-8 gap-8">
-            <button className="w-full px-8 py-3 rounded bg-primary-100">
+            <button
+              onClick={() => navigate("/news")}
+              className="w-full px-8 py-3 rounded bg-primary-100"
+            >
               Cancel
             </button>
             <button
@@ -162,7 +216,10 @@ export default function AddNews() {
           </div>
         </div>
         <div className="flex xl:hidden mt-16 mb-8 gap-8">
-          <button className="w-full px-8 py-3 rounded bg-primary-100">
+          <button
+            onClick={() => navigate("/news")}
+            className="w-full px-8 py-3 rounded bg-primary-100"
+          >
             Cancel
           </button>
           <button

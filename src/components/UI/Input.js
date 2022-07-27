@@ -10,7 +10,6 @@ const Input = (props) => {
       )}
       <input
         required={props.required}
-        autocomplete="off"
         className={`${
           props.secondary ? secondary : primary
         } w-full text-sm sm:text-base text-opacity-50 bg-primary-100 rounded outline-none border-none ring-0 

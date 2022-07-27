@@ -2,15 +2,29 @@ import { collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import profile from "../assets/images/profile.png";
+import DropdownB from "../components/UI/DropdownB";
 import Rating from "../components/UI/Rating";
 import Select from "../components/UI/Select";
 import { useStateContext } from "../contexts/ContextProvider";
 import { db } from "../firebase-config";
 export default function Quiz() {
+  const { businesses, selectedItemToEdit, selectItemToEdit, updateCheck } =
+    useStateContext();
   const navigate = useNavigate();
-  const { businesses, updateCheck } = useStateContext();
+  const [isOpen, setIsOpen] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [filterValue, setFilterValue] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
+  const menu = [
+    { name: "ID", col: "1", isSortable: true },
+    { name: "Image", col: "1", isSortable: false },
+    { name: "Title", col: "2", isSortable: true },
+    { name: "Paragraph", col: "3", isSortable: true },
+    { name: "Author", col: "2", isSortable: true },
+    { name: "Rating", col: "2", isSortable: true },
+    { name: "Action", col: "1", isSortable: false },
+  ];
+
   return (
     <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-0 xl:py-6 sm:mx-auto ">
       <div className="">
@@ -25,8 +39,6 @@ export default function Quiz() {
             />
             <svg
               className="object-contain w-4 h-4 absolute right-2 text-inherit "
-              width="19"
-              height="19"
               viewBox="0 0 19 19"
               fill="none"
               stroke="currentColor"
@@ -92,13 +104,29 @@ export default function Quiz() {
         </div>
         <div className="overflow-x-scroll scrollbar-thin scrollbar-thumb-neutral-600 w-full h-[70vh] shadow-2xl">
           <div className="min-w-[760px] xl:w-full py-4 px-3 sm:px-4 grid grid-cols-12 text-base text-left bg-primary-100">
-            <h3 className="col-span-1 ">ID</h3>
-            <h3 className="col-span-1 ">Image</h3>
-            <h3 className="col-span-2 ">Title</h3>
-            <h3 className="col-span-3 ">Paragraph</h3>
-            <h3 className="col-span-2 ">Author</h3>
-            <h3 className="col-span-2 ">Rating</h3>
-            <h3 className="col-span-1 text-center">Action</h3>
+            {menu.map((item) => {
+              return (
+                <h3
+                  key={item.name}
+                  className={`col-span-${item.col} flex items-center gap-2`}
+                >
+                  {item.name}
+                  {item.isSortable && (
+                    <svg
+                      className="h-2 w-2"
+                      viewBox="0 0 8 5"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4.36029 4.62558C4.16359 4.82999 3.83641 4.82999 3.63971 4.62558L0.484598 1.34669C0.178938 1.02904 0.404057 0.5 0.844887 0.5L7.15511 0.500001C7.59594 0.500001 7.82106 1.02904 7.5154 1.34669L4.36029 4.62558Z"
+                        fill="#656EE7"
+                      />
+                    </svg>
+                  )}
+                </h3>
+              );
+            })}
           </div>
           <div className="min-w-[760px] xl:w-full h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600">
             {businesses.map((business) => {
@@ -122,7 +150,6 @@ export default function Quiz() {
                   <div className="col-span-1">#1234</div>
                   <div className="col-span-1 flex items-center gap-2">
                     <img className="object-contain h-8" src={profile} alt="" />
-                    {/* <p className="py-3 text-left">{business.name}</p> */}
                   </div>
                   <div className="col-span-2">{business.name}</div>
                   {subscriptionRem ? (
@@ -137,47 +164,69 @@ export default function Quiz() {
                   )}
                   <div className="col-span-2">Thomas Lee</div>
                   <div className="col-span-2">
-                    <Rating />
+                    <Rating rating={3} isEditable={false} />
                   </div>
-                  <div className="col-span-1 text-center">...</div>
-                  {/* <div className="flex items-center justify-center flex-wrap gap-x-2 gap-y-1 py-1">
-                      <button
-                        onClick={async () => {
-                          if (business.isDisabled) {
-                            await updateDoc(
-                              doc(collection(db, "users"), business.id),
-                              {
-                                isDisabled: false,
-                              }
-                            );
-                            setDisabled(false);
-                          } else {
-                            await updateDoc(
-                              doc(collection(db, "users"), business.id),
-                              {
-                                isDisabled: true,
-                              }
-                            );
-                            setDisabled(true);
-                          }
-                          updateCheck();
+                  <button
+                    onClick={() => {
+                      selectedItem !== null
+                        ? setSelectedItem(null)
+                        : setSelectedItem(business);
+                    }}
+                    className="col-span-1 text-center"
+                  >
+                    <DropdownB id={business.id} selectedItem={selectedItem}>
+                      <div
+                        onClick={() => {
+                          selectItemToEdit(business);
+                          navigate("/edit-quiz");
                         }}
-                        className="text-xs sm:text-sm border border-white text-white font-normal rounded-full sm:rounded-md px-2 py-1 bg-primary-500 hover:bg-primary-400"
+                        className="flex gap-3 hover:bg-primary-200"
                       >
-                        {business.isDisabled ? "Enable" : "Disable"}
-                      </button>
-                      <button
+                        <div className="bg-primary-200 p-2">
+                          <svg
+                            className="h-3 w-3"
+                            viewBox="0 0 9 9"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M6.80855 0.376026C7.05038 0.140422 7.37528 0.00954907 7.7129 0.011746C8.05052 0.0139429 8.37369 0.149033 8.61243 0.387764C8.85117 0.626495 8.98626 0.949653 8.98846 1.28726C8.99066 1.62487 8.85978 1.94976 8.62417 2.19158L2.49647 8.31907L0 8.9999L0.680855 6.50352L6.80855 0.376026Z"
+                              fill="#D67C29"
+                            />
+                          </svg>
+                        </div>
+                        <p className="text-left">edit</p>
+                      </div>
+                      <div
                         onClick={async () => {
-                          await deleteDoc(
+                          /* await deleteDoc(
                             doc(collection(db, "users"), business.id)
                           );
-                          updateCheck();
+                          updateCheck(); */
                         }}
-                        className="text-xs sm:text-sm hover:underline hover:underline-offset-2 text-red-500"
+                        className="flex gap-3 hover:bg-primary-200"
                       >
-                        Delete
-                      </button>
-                    </div> */}
+                        <div className="bg-primary-200 p-2">
+                          <svg
+                            className="w-3 h-3"
+                            viewBox="0 0 9 9"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M0.853157 8.89184C0.632502 8.90467 0.415497 8.83132 0.2479 8.68725C-0.0826333 8.35475 -0.0826333 7.81774 0.2479 7.48524L7.4855 0.247614C7.82928 -0.074076 8.36873 -0.0561934 8.69042 0.28759C8.98132 0.598473 8.99827 1.07631 8.73012 1.40701L1.44988 8.68725C1.28444 8.82924 1.07092 8.90246 0.853157 8.89184Z"
+                              fill="#EA2828"
+                            />
+                            <path
+                              d="M8.08233 8.89186C7.8587 8.89091 7.64436 8.80214 7.48558 8.64465L0.247953 1.407C-0.0582687 1.0494 -0.0166362 0.51124 0.34096 0.20499C0.660123 -0.06833 1.13083 -0.06833 1.44996 0.20499L8.7302 7.44261C9.0739 7.76439 9.09167 8.30387 8.7699 8.64757C8.75709 8.66124 8.74387 8.67446 8.7302 8.68726C8.55194 8.84228 8.31733 8.91637 8.08233 8.89186Z"
+                              fill="#EA2828"
+                            />
+                          </svg>
+                        </div>
+                        <p className="text-left">Remove</p>
+                      </div>
+                    </DropdownB>
+                  </button>
                 </div>
               );
             })}

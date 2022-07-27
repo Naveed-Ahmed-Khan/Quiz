@@ -7,12 +7,18 @@ import Rating from "../components/UI/Rating";
 import Button from "../components/UI/Button";
 import BackdropModal from "../components/UI/BackdropModal";
 import { useNavigate } from "react-router-dom";
+import { useStateContext } from "../contexts/ContextProvider";
+import { isEditable } from "@testing-library/user-event/dist/utils";
 
-export default function AddQuiz() {
+export default function EditQuiz() {
+  const { selectedItemToEdit, selectItemToEdit } = useStateContext();
+
+  // console.log(selectedItemToEdit);
+
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [filterValue, setFilterValue] = useState("");
-  const [quizTitle, setQuizTitle] = useState("");
+  const [quizTitle, setQuizTitle] = useState(selectedItemToEdit?.name || "");
   const [paragraph, setParagraph] = useState("");
   const [answertext, setAnswertext] = useState("");
   const [image, setImage] = useState("");
@@ -63,7 +69,7 @@ export default function AddQuiz() {
             </svg>
 
             <h2 className="text-xxl sm:text-2xl text-primary-500 font-medium">
-              Add Quiz
+              Edit Quiz
             </h2>
           </div>
         </div>
@@ -156,9 +162,9 @@ export default function AddQuiz() {
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <div className="px-6 py-4 mb-2 bg-primary-100 rounded w-full">
                 <Rating
-                  isEditable={true}
                   rating={rating}
                   setRating={setRating}
+                  isEditable={true}
                 />
               </div>
               <TextArea

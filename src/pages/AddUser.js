@@ -12,6 +12,7 @@ export default function AddUser() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [filterValue, setFilterValue] = useState("");
+  const [author, setAuthor] = useState("");
   return (
     <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-6 xl:py-8 sm:mx-auto">
       <section>
@@ -75,11 +76,20 @@ export default function AddUser() {
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <Input placeholder={"Type something ..."} />
+              <Input
+                placeholder={"Type something ..."}
+                value={author}
+                onChange={(e) => {
+                  setAuthor(e.target.value);
+                }}
+              />
             </div>
           </div>
           <div className="mt-16 flex gap-8">
-            <button className="w-full px-8 py-3 rounded bg-primary-100">
+            <button
+              onClick={() => navigate("/users")}
+              className="w-full px-8 py-3 rounded bg-primary-100"
+            >
               Cancel
             </button>
             <button
