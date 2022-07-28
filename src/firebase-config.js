@@ -10,13 +10,21 @@ import { getMessaging } from "firebase/messaging/sw";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// const firebaseConfig = {
+//   apiKey: "AIzaSyDa3Gyo9RYmrNtVlYVZwh_eTELEqv04tSM",
+//   authDomain: "logo-2d6da.firebaseapp.com",
+//   projectId: "logo-2d6da",
+//   storageBucket: "logo-2d6da.appspot.com",
+//   messagingSenderId: "73251661072",
+//   appId: "1:73251661072:web:8b20be6f91dd5328d33195",
+// };
 const firebaseConfig = {
-  apiKey: "AIzaSyDa3Gyo9RYmrNtVlYVZwh_eTELEqv04tSM",
-  authDomain: "logo-2d6da.firebaseapp.com",
-  projectId: "logo-2d6da",
-  storageBucket: "logo-2d6da.appspot.com",
-  messagingSenderId: "73251661072",
-  appId: "1:73251661072:web:8b20be6f91dd5328d33195",
+  apiKey: "AIzaSyDu78h3hEQ8DTmLQAx2j7BAoJgi7sANUNk",
+  authDomain: "quiz-demo-f1989.firebaseapp.com",
+  projectId: "quiz-demo-f1989",
+  storageBucket: "quiz-demo-f1989.appspot.com",
+  messagingSenderId: "41034054793",
+  appId: "1:41034054793:web:316f4908eab59367425a58",
 };
 
 // Initialize Firebase

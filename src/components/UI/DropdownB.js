@@ -14,7 +14,7 @@ export default function DropdownB({ children, id, selectedItem }) {
   const navigate = useNavigate();
   // console.log(selectedItem);
   return (
-    <div className="flex items-center bg-transparent">
+    <div className="">
       <div className="relative inline-block">
         {/* <!-- Dropdown toggle button --> */}
         <div>

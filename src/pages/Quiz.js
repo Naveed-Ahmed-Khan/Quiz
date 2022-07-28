@@ -8,8 +8,14 @@ import Select from "../components/UI/Select";
 import { useStateContext } from "../contexts/ContextProvider";
 import { db } from "../firebase-config";
 export default function Quiz() {
-  const { businesses, selectedItemToEdit, selectItemToEdit, updateCheck } =
-    useStateContext();
+  const {
+    quiz,
+    businesses,
+    selectedItemToEdit,
+    selectItemToEdit,
+    updateCheck,
+  } = useStateContext();
+  console.log(quiz);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -22,7 +28,7 @@ export default function Quiz() {
     { name: "Paragraph", col: "3", isSortable: true },
     { name: "Author", col: "2", isSortable: true },
     { name: "Rating", col: "2", isSortable: true },
-    { name: "Action", col: "1", isSortable: false },
+    { name: "Action", col: "1", isSortable: false, xPos: "center" },
   ];
 
   return (
@@ -108,7 +114,8 @@ export default function Quiz() {
               return (
                 <h3
                   key={item.name}
-                  className={`col-span-${item.col} flex items-center gap-2`}
+                  className={`col-span-${item.col} flex items-center gap-2
+                  ${item.xPos ? `justify-${item.xPos}` : "justify-start"}`}
                 >
                   {item.name}
                   {item.isSortable && (
@@ -129,55 +136,39 @@ export default function Quiz() {
             })}
           </div>
           <div className="min-w-[760px] xl:w-full h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600">
-            {businesses.map((business) => {
-              let subscriptionRem = null;
-              if (business.activeSubscription) {
-                subscriptionRem =
-                  business.activeSubscription.expirationDate
-                    .toDate()
-                    .getTime() - Date.now();
-                console.log(new Date(subscriptionRem));
-                subscriptionRem = new Date(subscriptionRem);
-              }
-              // console.log(subscriptionRem);
+            {quiz.map((quiz) => {
               return (
                 <div
-                  key={business.id}
-                  className={`w-full grid grid-cols-12 text-left hover:bg-primary-100 text-sm sm:text-base px-3 py-3 sm:px-4 sm:py-2 rounded${
-                    business.isDisabled ? "opacity-50" : "opacity-100"
-                  } border-b border-b-primary-100 text-secondary-100 items-center`}
+                  key={quiz.id}
+                  className={`w-full grid grid-cols-12 text-left hover:bg-primary-100 text-sm sm:text-base px-3 py-3 
+                  sm:px-4 sm:py-2 rounded border-b border-b-primary-100 text-secondary-100 items-center`}
                 >
                   <div className="col-span-1">#1234</div>
                   <div className="col-span-1 flex items-center gap-2">
-                    <img className="object-contain h-8" src={profile} alt="" />
+                    <img
+                      className="object-cover h-8 w-8 rounded-full"
+                      src={quiz.image}
+                      alt=""
+                    />
                   </div>
-                  <div className="col-span-2">{business.name}</div>
-                  {subscriptionRem ? (
-                    <p className="col-span-3 py-3 text-left">
-                      {subscriptionRem.getDate()} days:{" "}
-                      {business.activeSubscription.name}
-                    </p>
-                  ) : (
-                    <p className="col-span-3 py-3 text-left">
-                      {"Not subscribed"}
-                    </p>
-                  )}
+                  <div className="col-span-2">{quiz.name}</div>
+                  <div className="col-span-3">{quiz.paragraph}</div>
                   <div className="col-span-2">Thomas Lee</div>
                   <div className="col-span-2">
-                    <Rating rating={3} isEditable={false} />
+                    <Rating rating={quiz.rating} isEditable={false} />
                   </div>
                   <button
                     onClick={() => {
                       selectedItem !== null
                         ? setSelectedItem(null)
-                        : setSelectedItem(business);
+                        : setSelectedItem(quiz);
                     }}
-                    className="col-span-1 text-center"
+                    className="col-span-1 flex justify-center"
                   >
-                    <DropdownB id={business.id} selectedItem={selectedItem}>
+                    <DropdownB id={quiz.id} selectedItem={selectedItem}>
                       <div
                         onClick={() => {
-                          selectItemToEdit(business);
+                          selectItemToEdit(quiz);
                           navigate("/edit-quiz");
                         }}
                         className="flex gap-3 hover:bg-primary-200"
@@ -200,7 +191,7 @@ export default function Quiz() {
                       <div
                         onClick={async () => {
                           /* await deleteDoc(
-                            doc(collection(db, "users"), business.id)
+                            doc(collection(db, "users"), quiz.id)
                           );
                           updateCheck(); */
                         }}

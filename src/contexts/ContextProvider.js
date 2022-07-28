@@ -10,12 +10,14 @@ export const ContextProvider = ({ children }) => {
   const { currentUser } = useAuth();
   const [check, setCheck] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { data: quizData } = useFetch("quizes", check);
   const { data: usersData } = useFetch("users", check);
   const { data: placesData } = useFetch("places", check);
   const { data: subscriptionData } = useFetch("subscriptions", check);
 
   const [showDetails, setShowDetails] = useState(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
+  const [quiz, setQuiz] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [businesses, setBusinesses] = useState([]);
   const [events, setEvents] = useState([]);
@@ -26,6 +28,28 @@ export const ContextProvider = ({ children }) => {
   const [selectedItemToEdit, setSelectedItemToEdit] = useState(null);
 
   // console.log(selectedItemToEdit);
+
+  useEffect(() => {
+    const InitializeData = () => {
+      setQuiz(quizData);
+    };
+
+    InitializeData();
+  }, [quizData]);
+
+  useEffect(() => {
+    const setPlacesData = () => {
+      if (currentUser?.email === "admin@gmail.com") {
+        setLocations(placesData);
+      } else {
+        setLocations(
+          placesData.filter((place) => place.businessId === currentUser?.uid)
+        );
+      }
+    };
+
+    setPlacesData();
+  }, [currentUser?.email, currentUser?.uid, placesData]);
 
   useEffect(() => {
     const checkExpiration = async (activeSubscription) => {
@@ -108,6 +132,7 @@ export const ContextProvider = ({ children }) => {
   // console.log(locations);
 
   const exportValues = {
+    quiz,
     loading,
     subscriptions,
     showDetails,
