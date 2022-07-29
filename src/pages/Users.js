@@ -7,9 +7,10 @@ import Rating from "../components/UI/Rating";
 import Select from "../components/UI/Select";
 import { useStateContext } from "../contexts/ContextProvider";
 import { db } from "../firebase-config";
+import convertDate from "../utility/convertDate";
 export default function Users() {
   const navigate = useNavigate();
-  const { businesses, selectItemToEdit, updateCheck } = useStateContext();
+  const { users, selectItemToEdit, updateCheck } = useStateContext();
   const [disabled, setDisabled] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
@@ -18,7 +19,7 @@ export default function Users() {
     { name: "Name", col: "2", isSortable: true },
     { name: "Email", col: "4", isSortable: true },
     { name: "Join Date", col: "2", isSortable: true },
-    { name: "Action", col: "2", isSortable: false },
+    { name: "Action", col: "2", isSortable: false, xPos: "center" },
   ];
   return (
     <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-0 xl:py-6 sm:mx-auto">
@@ -105,7 +106,8 @@ export default function Users() {
               return (
                 <h3
                   key={item.name}
-                  className={`col-span-${item.col} flex items-center gap-2`}
+                  className={`col-span-${item.col} flex items-center gap-2 
+                  ${item.xPos ? `justify-${item.xPos}` : "justify-start"} `}
                 >
                   {item.name}
                   {item.isSortable && (
@@ -126,44 +128,36 @@ export default function Users() {
             })}
           </div>
           <div className="min-w-[760px] xl:w-full h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600">
-            {businesses.map((business) => {
-              let subscriptionRem = null;
-              if (business.activeSubscription) {
-                subscriptionRem =
-                  business.activeSubscription.expirationDate
-                    .toDate()
-                    .getTime() - Date.now();
-                console.log(new Date(subscriptionRem));
-                subscriptionRem = new Date(subscriptionRem);
-              }
-              // console.log(subscriptionRem);
+            {users.map((user) => {
               return (
                 <div
-                  key={business.id}
+                  key={user.id}
                   className={`w-full grid grid-cols-12 text-left hover:bg-primary-100 text-sm sm:text-base px-3 py-3 sm:px-4 sm:py-2 rounded${
-                    business.isDisabled ? "opacity-50" : "opacity-100"
+                    user.isDisabled ? "opacity-50" : "opacity-100"
                   } border-b border-b-primary-100 text-secondary-100 items-center`}
                 >
                   <div className="col-span-2 flex items-center gap-2">
-                    <img className="object-contain h-8" src={profile} alt="" />
-                    {/* <p className="py-3 text-left">{business.name}</p> */}
+                    <img
+                      className="object-cover h-8 w-8 rounded-full"
+                      src={user.image}
+                      alt=""
+                    />
                   </div>
-                  <div className="col-span-2">{business.name}</div>
-
-                  <p className="col-span-4 py-3 text-left">{business.email}</p>
-                  <div className="col-span-2">01/02/2020</div>
+                  <div className="col-span-2">{user.name}</div>
+                  <p className="col-span-4 py-3 text-left">{user.email}</p>
+                  <div className="col-span-2">{convertDate(user.joinDate)}</div>
                   <button
                     onClick={() => {
                       selectedItem !== null
                         ? setSelectedItem(null)
-                        : setSelectedItem(business);
+                        : setSelectedItem(user);
                     }}
-                    className="col-span-1 text-center"
+                    className="col-span-2 text-center"
                   >
-                    <DropdownB id={business.id} selectedItem={selectedItem}>
+                    <DropdownB id={user.id} selectedItem={selectedItem}>
                       <div
                         onClick={() => {
-                          selectItemToEdit(business);
+                          selectItemToEdit(user);
                           navigate("/edit-users");
                         }}
                         className="flex gap-3 hover:bg-primary-200"
@@ -187,7 +181,7 @@ export default function Users() {
                       <div
                         onClick={async () => {
                           /* await deleteDoc(
-                            doc(collection(db, "users"), business.id)
+                            doc(collection(db, "users"), user.id)
                           );
                           updateCheck(); */
                         }}

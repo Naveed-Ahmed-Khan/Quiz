@@ -7,147 +7,53 @@ import { useAuth } from "./AuthContext";
 const StateContext = createContext();
 
 export const ContextProvider = ({ children }) => {
-  const { currentUser } = useAuth();
   const [check, setCheck] = useState(false);
   const [loading, setLoading] = useState(true);
   const { data: quizData } = useFetch("quizes", check);
+  const { data: newsData } = useFetch("news", check);
   const { data: usersData } = useFetch("users", check);
-  const { data: placesData } = useFetch("places", check);
-  const { data: subscriptionData } = useFetch("subscriptions", check);
+  const { data: categoriesData } = useFetch("categories", check);
 
-  const [showDetails, setShowDetails] = useState(null);
-  const [selectedPlace, setSelectedPlace] = useState(null);
-  const [quiz, setQuiz] = useState([]);
-  const [customers, setCustomers] = useState([]);
-  const [businesses, setBusinesses] = useState([]);
-  const [events, setEvents] = useState([]);
-  const [locations, setLocations] = useState([]);
-  const [subscriptions, setSubscriptions] = useState([]);
-  const [selectedUserInfo, setSelectedUserInfo] = useState([]);
-  const [notification, setNotification] = useState(null);
   const [selectedItemToEdit, setSelectedItemToEdit] = useState(null);
-
-  // console.log(selectedItemToEdit);
+  const [quiz, setQuiz] = useState([]);
+  const [news, setNews] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [newsCategories, setNewsCategories] = useState([]);
+  const [quizCategories, setQuizCategories] = useState([]);
 
   useEffect(() => {
     const InitializeData = () => {
       setQuiz(quizData);
+      setNews(newsData);
+      setUsers(usersData);
+      setNewsCategories(
+        categoriesData.filter((category) => category.type === "news")
+      );
+      setQuizCategories(
+        categoriesData.filter((category) => category.type === "quiz")
+      );
     };
 
     InitializeData();
-  }, [quizData]);
-
-  useEffect(() => {
-    const setPlacesData = () => {
-      if (currentUser?.email === "admin@gmail.com") {
-        setLocations(placesData);
-      } else {
-        setLocations(
-          placesData.filter((place) => place.businessId === currentUser?.uid)
-        );
-      }
-    };
-
-    setPlacesData();
-  }, [currentUser?.email, currentUser?.uid, placesData]);
-
-  useEffect(() => {
-    const checkExpiration = async (activeSubscription) => {
-      const dateToday = new Date().getTime();
-      const expirationDate = activeSubscription?.expirationDate
-        .toDate()
-        .getTime();
-      if (expirationDate < dateToday) {
-        console.log("expired");
-        try {
-          await updateDoc(doc(collection(db, "users"), currentUser?.uid), {
-            activeSubscription: null,
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        console.log("not expired");
-        return;
-      }
-    };
-
-    if (selectedUserInfo[0]?.activeSubscription) {
-      checkExpiration(selectedUserInfo[0]?.activeSubscription);
-    }
-  }, [currentUser?.uid, selectedUserInfo]);
-
-  useEffect(() => {
-    const filterUsers = () => {
-      setCustomers(usersData.filter((user) => user.type === "customer"));
-    };
-    const filterBusinesses = () => {
-      let businesses = usersData.filter((user) => user.type === "business");
-      setBusinesses(businesses);
-      setSelectedUserInfo(
-        businesses.filter(
-          (business) => business.businessId === currentUser?.uid
-        )
-      );
-    };
-    setSubscriptions(subscriptionData);
-    filterUsers();
-    filterBusinesses();
-  }, [usersData, subscriptionData, currentUser?.uid]);
-
-  useEffect(() => {
-    const setPlacesData = () => {
-      if (currentUser?.email === "admin@gmail.com") {
-        setLocations(placesData);
-      } else {
-        setLocations(
-          placesData.filter((place) => place.businessId === currentUser?.uid)
-        );
-      }
-    };
-
-    setPlacesData();
-  }, [currentUser?.email, currentUser?.uid, placesData]);
-
-  // console.log(locations);
+  }, [categoriesData, newsData, quizData, usersData]);
 
   const updateCheck = () => {
     setCheck(!check);
   };
-  const updateNotification = (value) => {
-    setNotification(value);
-  };
-  const updateShowDetails = (value) => {
-    setShowDetails(value);
-  };
-  const updateSelectedPlace = (value) => {
-    setSelectedPlace(value);
-  };
+
   const selectItemToEdit = (value) => {
     setSelectedItemToEdit(value);
   };
 
-  // console.log(customers);
-  // console.log(businesses);
-  // console.log(locations);
-
   const exportValues = {
-    quiz,
     loading,
-    subscriptions,
-    showDetails,
-    updateShowDetails,
-    customers,
-    businesses,
-    locations,
-    events,
-    updateCheck,
-    selectedPlace,
-    selectedUserInfo,
-    updateSelectedPlace,
-    notification,
-    updateNotification,
+    quiz,
+    news,
+    users,
+    newsCategories,
+    quizCategories,
     selectedItemToEdit,
+    updateCheck,
     selectItemToEdit,
   };
 

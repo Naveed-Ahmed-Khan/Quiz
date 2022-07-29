@@ -22,10 +22,9 @@ export default function Quiz() {
   const [filterValue, setFilterValue] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const menu = [
-    { name: "ID", col: "1", isSortable: true },
     { name: "Image", col: "1", isSortable: false },
     { name: "Title", col: "2", isSortable: true },
-    { name: "Paragraph", col: "3", isSortable: true },
+    { name: "Paragraph", col: "4", isSortable: true },
     { name: "Author", col: "2", isSortable: true },
     { name: "Rating", col: "2", isSortable: true },
     { name: "Action", col: "1", isSortable: false, xPos: "center" },
@@ -143,7 +142,6 @@ export default function Quiz() {
                   className={`w-full grid grid-cols-12 text-left hover:bg-primary-100 text-sm sm:text-base px-3 py-3 
                   sm:px-4 sm:py-2 rounded border-b border-b-primary-100 text-secondary-100 items-center`}
                 >
-                  <div className="col-span-1">#1234</div>
                   <div className="col-span-1 flex items-center gap-2">
                     <img
                       className="object-cover h-8 w-8 rounded-full"
@@ -152,8 +150,8 @@ export default function Quiz() {
                     />
                   </div>
                   <div className="col-span-2">{quiz.name}</div>
-                  <div className="col-span-3">{quiz.paragraph}</div>
-                  <div className="col-span-2">Thomas Lee</div>
+                  <div className="col-span-4 px-3">{quiz.paragraph}</div>
+                  <div className="col-span-2">{quiz.author}</div>
                   <div className="col-span-2">
                     <Rating rating={quiz.rating} isEditable={false} />
                   </div>

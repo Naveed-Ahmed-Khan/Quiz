@@ -7,7 +7,7 @@ import Rating from "../components/UI/Rating";
 import Button from "../components/UI/Button";
 import BackdropModal from "../components/UI/BackdropModal";
 import { useNavigate } from "react-router-dom";
-import { addDoc, collection, doc } from "firebase/firestore";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { db, storage } from "../firebase-config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import InputFile from "../components/UI/InputFile";
@@ -28,7 +28,7 @@ export default function AddQuiz() {
   const [rating, setRating] = useState(null);
   const [answer, setAnswer] = useState("True");
 
-  const submitQuizHandler = async (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     let path = "";
     if (selectedImage) {
@@ -51,12 +51,13 @@ export default function AddQuiz() {
         comment: comment,
         rating: rating,
         answer: answer,
+        date: Timestamp.fromDate(Date.now()),
       });
       updateCheck();
+      setShowModal(true);
     } catch (error) {
       console.log(error);
     }
-    setShowModal(true);
   };
 
   return (
@@ -106,10 +107,7 @@ export default function AddQuiz() {
           </div>
         </div>
       </section>
-      <form
-        onSubmit={submitQuizHandler}
-        className="xl:flex justify-between gap-8"
-      >
+      <form onSubmit={submitHandler} className="xl:flex justify-between gap-8">
         <div className="flex-auto">
           <div className="grid grid-cols-12 gap-y-3 sm:gap-y-8">
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">

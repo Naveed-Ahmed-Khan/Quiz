@@ -9,7 +9,8 @@ import { useStateContext } from "../contexts/ContextProvider";
 import { db } from "../firebase-config";
 export default function CategoriesNews() {
   const navigate = useNavigate();
-  const { businesses, updateCheck } = useStateContext();
+  const { newsCategories, updateCheck } = useStateContext();
+  console.log(newsCategories);
   const [disabled, setDisabled] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
@@ -114,41 +115,30 @@ export default function CategoriesNews() {
             })}
           </div>
           <div className="xl:w-full h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600">
-            {businesses.map((business) => {
-              let subscriptionRem = null;
-              if (business.activeSubscription) {
-                subscriptionRem =
-                  business.activeSubscription.expirationDate
-                    .toDate()
-                    .getTime() - Date.now();
-                console.log(new Date(subscriptionRem));
-                subscriptionRem = new Date(subscriptionRem);
-              }
-              // console.log(subscriptionRem);
+            {newsCategories.map((category) => {
               return (
                 <div
-                  key={business.id}
-                  className={`w-full grid grid-cols-12 text-left hover:bg-primary-100 text-sm sm:text-base px-3 py-3 sm:px-4 sm:py-2 rounded${
-                    business.isDisabled ? "opacity-50" : "opacity-100"
-                  } group border-b border-b-primary-100 text-secondary-100 items-center`}
+                  key={category.id}
+                  className={`w-full grid grid-cols-12 text-left hover:bg-primary-100 text-sm sm:text-base px-3 py-3 sm:px-4 sm:py-2 rounded
+                    group border-b border-b-primary-100 text-secondary-100 items-center`}
                 >
                   <div className="col-span-2 flex items-center">
                     <div className="h-5 w-5 bg-primary-100 rounded group-hover:bg-secondary-300" />
                   </div>
                   <div className="col-span-7 flex items-center gap-2">
                     <img className="object-contain h-8" src={profile} alt="" />
-                    <p className="py-3 text-left">{business.name}</p>
+                    <p className="py-3 text-left">{category.name}</p>
                   </div>
 
                   <button
                     onClick={() => {
                       selectedItem !== null
                         ? setSelectedItem(null)
-                        : setSelectedItem(business);
+                        : setSelectedItem(category);
                     }}
                     className="col-span-3 py-1 flex justify-center"
                   >
-                    <DropdownB id={business.id} selectedItem={selectedItem}>
+                    <DropdownB id={category.id} selectedItem={selectedItem}>
                       <div className="flex gap-3 hover:bg-primary-200">
                         <div className="bg-primary-200 p-2">
                           <svg
@@ -169,7 +159,7 @@ export default function CategoriesNews() {
                       <div
                         onClick={async () => {
                           /* await deleteDoc(
-                            doc(collection(db, "users"), business.id)
+                            doc(collection(db, "users"), category.id)
                           );
                           updateCheck(); */
                         }}

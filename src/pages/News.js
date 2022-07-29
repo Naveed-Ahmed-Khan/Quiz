@@ -7,10 +7,11 @@ import Rating from "../components/UI/Rating";
 import Select from "../components/UI/Select";
 import { useStateContext } from "../contexts/ContextProvider";
 import { db } from "../firebase-config";
+import convertDate from "../utility/convertDate";
 
 export default function News() {
   const navigate = useNavigate();
-  const { businesses, selectItemToEdit, updateCheck } = useStateContext();
+  const { news, selectItemToEdit, updateCheck } = useStateContext();
   const [disabled, setDisabled] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
@@ -21,7 +22,7 @@ export default function News() {
     { name: "Categories", col: "2", isSortable: true },
     { name: "Author", col: "2", isSortable: true },
     { name: "Date", col: "2", isSortable: true },
-    { name: "Action", col: "1", isSortable: false },
+    { name: "Action", col: "1", isSortable: false, xPos: "center" },
   ];
   return (
     <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-0 xl:py-6 sm:mx-auto">
@@ -108,7 +109,8 @@ export default function News() {
               return (
                 <h3
                   key={item.name}
-                  className={`col-span-${item.col} flex items-center gap-2`}
+                  className={`col-span-${item.col} flex items-center gap-2 
+                  ${item.xPos ? `justify-${item.xPos}` : "justify-start"} `}
                 >
                   {item.name}
                   {item.isSortable && (
@@ -129,54 +131,37 @@ export default function News() {
             })}
           </div>
           <div className="min-w-[760px] xl:w-full h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600">
-            {businesses.map((business) => {
-              let subscriptionRem = null;
-              if (business.activeSubscription) {
-                subscriptionRem =
-                  business.activeSubscription.expirationDate
-                    .toDate()
-                    .getTime() - Date.now();
-                console.log(new Date(subscriptionRem));
-                subscriptionRem = new Date(subscriptionRem);
-              }
-
+            {news.map((news) => {
               return (
                 <div
-                  key={business.id}
-                  className={`w-full grid grid-cols-12 text-left hover:bg-primary-100 text-sm sm:text-base px-3 py-3 sm:px-4 sm:py-2 rounded${
-                    business.isDisabled ? "opacity-50" : "opacity-100"
-                  } border-b border-b-primary-100 text-secondary-100 items-center`}
+                  key={news.id}
+                  className={`w-full grid grid-cols-12 text-left hover:bg-primary-100 text-sm sm:text-base px-3 py-3 
+                  sm:px-4 sm:py-2 rounded border-b border-b-primary-100 text-secondary-100 items-center`}
                 >
                   <div className="col-span-1 flex items-center gap-2">
-                    <img className="object-contain h-8" src={profile} alt="" />
+                    <img
+                      className="object-cover h-8 w-8 rounded-full"
+                      src={news.image}
+                      alt=""
+                    />
                   </div>
-                  <div className="col-span-2">{business.name}</div>
-
-                  {subscriptionRem ? (
-                    <p className="col-span-2 py-3 text-left">
-                      {subscriptionRem.getDate()} days:{" "}
-                      {business.activeSubscription.name}
-                    </p>
-                  ) : (
-                    <p className="col-span-2 py-3 text-left">
-                      {"Not subscribed"}
-                    </p>
-                  )}
-                  <div className="col-span-2">Single Cases</div>
-                  <div className="col-span-2">Thomas Lee</div>
-                  <div className="col-span-2">01/02/2022</div>
+                  <div className="col-span-2">{news.name}</div>
+                  <div className="col-span-2">{news.paragraph}</div>
+                  <div className="col-span-2">{news.category}</div>
+                  <div className="col-span-2">{news.author}</div>
+                  <div className="col-span-2">{convertDate(news.date)}</div>
                   <button
                     onClick={() => {
                       selectedItem !== null
                         ? setSelectedItem(null)
-                        : setSelectedItem(business);
+                        : setSelectedItem(news);
                     }}
                     className="col-span-1 text-center"
                   >
-                    <DropdownB id={business.id} selectedItem={selectedItem}>
+                    <DropdownB id={news.id} selectedItem={selectedItem}>
                       <div
                         onClick={() => {
-                          selectItemToEdit(business);
+                          selectItemToEdit(news);
                           navigate("/edit-news");
                         }}
                         className="flex gap-3 hover:bg-primary-200"
@@ -200,7 +185,7 @@ export default function News() {
                       <div
                         onClick={async () => {
                           /* await deleteDoc(
-                            doc(collection(db, "users"), business.id)
+                            doc(collection(db, "users"), news.id)
                           );
                           updateCheck(); */
                         }}

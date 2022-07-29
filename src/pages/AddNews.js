@@ -8,24 +8,63 @@ import Button from "../components/UI/Button";
 import { useNavigate } from "react-router-dom";
 import BackdropModal from "../components/UI/BackdropModal";
 
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { db, storage } from "../firebase-config";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
+import InputFile from "../components/UI/InputFile";
+import { useStateContext } from "../contexts/ContextProvider";
+
 export default function AddNews() {
+  const { updateCheck } = useStateContext;
+
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [filterValue, setFilterValue] = useState("");
-  const [quizTitle, setQuizTitle] = useState("");
+  const [title, setTitle] = useState("");
   const [paragraph, setParagraph] = useState("");
   const [answertext, setAnswertext] = useState("");
-  const [image, setImage] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const [category, setCategory] = useState("");
   const [author, setAuthor] = useState("");
   const [date, setDate] = useState("");
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    let path = "";
+    if (selectedImage) {
+      const appIconRef = ref(
+        storage,
+        `news_images/${selectedImage.name}-${new Date().getTime()}`
+      );
+      await uploadBytes(appIconRef, selectedImage);
+      path = await getDownloadURL(appIconRef);
+    }
+    console.log(path);
+    try {
+      await addDoc(collection(db, "news"), {
+        name: title,
+        paragraph: paragraph,
+        ansText: answertext,
+        image: path,
+        category: category,
+        author: author,
+        newsDate: Timestamp.fromDate(new Date(date)),
+        date: Timestamp.fromDate(new Date(Date.now())),
+      });
+      updateCheck();
+      setShowModal(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-6 xl:py-8 sm:mx-auto">
       <section>
         <div className="mt-6 sm:mt-0 text-end">
           <form className="relative flex items-center md:flex-row w-full sm:w-fit md:space-x-3 md:space-y-0 ">
             <input
+              required
               type="text"
               className="text-white py-3 pl-2 pr-8 bg-transparent w-full sm:w-fit border-t-0 border-l-0 border-r-0 border-b-2 outline-none ring-0 focus:border-b-primary-dark focus:border-b-2 focus:ring-0"
               placeholder="Search"
@@ -73,7 +112,7 @@ export default function AddNews() {
           </div>
         </div>
       </section>
-      <section className="xl:flex justify-between gap-8">
+      <form onSubmit={submitHandler} className="xl:flex justify-between gap-8">
         <div className="flex-auto">
           <div className="grid grid-cols-12 gap-y-3 sm:gap-y-8">
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
@@ -84,10 +123,11 @@ export default function AddNews() {
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <Input
+                required
                 placeholder={"Type something ..."}
-                value={quizTitle}
+                value={title}
                 onChange={(e) => {
-                  setQuizTitle(e.target.value);
+                  setTitle(e.target.value);
                 }}
               />
             </div>
@@ -99,6 +139,7 @@ export default function AddNews() {
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <TextArea
+                required
                 rows={6}
                 placeholder={"Type something ..."}
                 value={paragraph}
@@ -115,6 +156,7 @@ export default function AddNews() {
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <Input
+                required
                 placeholder={"Type something ..."}
                 value={answertext}
                 onChange={(e) => {
@@ -129,10 +171,10 @@ export default function AddNews() {
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <Input
-                placeholder={"Type something ..."}
-                value={selectedImage}
-                onChange={(e) => {
+              <InputFile
+                required
+                imageName={selectedImage?.name}
+                onChange={async (e) => {
                   setSelectedImage(e.target.files[0]);
                 }}
               />
@@ -144,13 +186,18 @@ export default function AddNews() {
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <Input
-                placeholder={"Type something ..."}
+              <Select
+                alt
+                required
                 value={category}
                 onChange={(e) => {
                   setCategory(e.target.value);
                 }}
-              />
+              >
+                <option value="Entertainment">Entertainment</option>
+                <option value="General">General</option>
+                <option value="Politics">Politics</option>
+              </Select>
             </div>
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Author</label>
@@ -160,6 +207,7 @@ export default function AddNews() {
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <Input
+                required
                 placeholder={"Type something ..."}
                 value={author}
                 onChange={(e) => {
@@ -175,23 +223,28 @@ export default function AddNews() {
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <Input
+                required
                 placeholder={"Type something ..."}
                 value={date}
                 onChange={(e) => {
                   setDate(e.target.value);
                 }}
               />
+              <p className="mt-1 text-sm text-white text-opacity-50">
+                Format (MM/DD/YYYY)
+              </p>
             </div>
           </div>
           <div className="hidden xl:flex mt-16 mb-8 gap-8">
             <button
+              type="button"
               onClick={() => navigate("/news")}
               className="w-full px-8 py-3 rounded bg-primary-100"
             >
               Cancel
             </button>
             <button
-              onClick={() => setShowModal(true)}
+              type="submit"
               className="w-full px-8 py-3 rounded bg-secondary-300"
             >
               Save
@@ -217,19 +270,20 @@ export default function AddNews() {
         </div>
         <div className="flex xl:hidden mt-16 mb-8 gap-8">
           <button
+            type="button"
             onClick={() => navigate("/news")}
             className="w-full px-8 py-3 rounded bg-primary-100"
           >
             Cancel
           </button>
           <button
-            onClick={() => setShowModal(true)}
+            type="submit"
             className="w-full px-8 py-3 rounded bg-secondary-300"
           >
             Save
           </button>
         </div>
-      </section>
+      </form>
       <BackdropModal
         title="Successfully Saved"
         show={showModal}

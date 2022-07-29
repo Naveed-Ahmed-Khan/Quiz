@@ -7,7 +7,9 @@ import admin from "../../assets/images/admin.png";
 import { useState } from "react";
 
 const Sidebar = (props) => {
-  const [isOpen, setIsOpen] = useState(false);
+  // const { currentUser } = useAuth();
+  // console.log(currentUser);
+  // const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { logout } = useAuth();
 
@@ -98,7 +100,7 @@ const Sidebar = (props) => {
                     </div>
                   </Link>
                 </li>
-                <li className="">
+                {/* <li className="">
                   <Link
                     onClick={() => {
                       props.setShowBackdrop(false);
@@ -124,7 +126,7 @@ const Sidebar = (props) => {
                       <p className="text-sm font-medium">Rating</p>
                     </div>
                   </Link>
-                </li>
+                </li> */}
                 <li className="">
                   <Link
                     onClick={() => {
@@ -185,9 +187,9 @@ const Sidebar = (props) => {
                 </li>
                 <li className="">
                   <button
-                    onClick={() => {
-                      setIsOpen((prev) => !prev);
-                    }}
+                    // onClick={() => {
+                    //   setIsOpen((prev) => !prev);
+                    // }}
                     className="w-full"
                   >
                     <div
@@ -283,7 +285,7 @@ const Sidebar = (props) => {
                   </Link>
                 </li>
                 <li className="">
-                  <Link to={"/login"}>
+                  <Link onClick={() => logout()} to={"/login"}>
                     <div
                       className={`px-3 py-[14px] ${
                         location.pathname === "/login"
@@ -353,7 +355,10 @@ const Sidebar = (props) => {
                     <img className="mr-3" src={admin} alt="" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Carlos Perderson</p>
+                    <p className="text-sm font-medium">
+                      {/* {currentUser?.displayName} */}
+                      Carlos Perderson
+                    </p>
                     <p className="text-xs text-white text-opacity-60">Admin</p>
                   </div>
                 </div>
@@ -384,7 +389,7 @@ const Sidebar = (props) => {
                         </div>
                       </Link>
                     </li>
-                    <li className="">
+                    {/* <li className="">
                       <Link to={"/rating"}>
                         <div
                           className={`px-3 py-[14px] ${
@@ -404,7 +409,7 @@ const Sidebar = (props) => {
                           <p className="text-sm font-medium">Rating</p>
                         </div>
                       </Link>
-                    </li>
+                    </li> */}
                     <li className="">
                       <Link to={"/users"}>
                         <div
@@ -452,9 +457,9 @@ const Sidebar = (props) => {
                     </li>
                     <li className="">
                       <button
-                        onClick={() => {
-                          setIsOpen((prev) => !prev);
-                        }}
+                        // onClick={() => {
+                        //   setIsOpen((prev) => !prev);
+                        // }}
                         className="w-full"
                       >
                         <div
@@ -538,7 +543,7 @@ const Sidebar = (props) => {
                       </Link>
                     </li>
                     <li className="">
-                      <Link to={"/login"}>
+                      <Link onClick={() => logout()} to={"/login"}>
                         <div
                           className={`px-3 py-[14px] ${
                             location.pathname === "/login"

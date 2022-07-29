@@ -1,18 +1,37 @@
 import React, { useState } from "react";
-import Select from "../components/UI/Select";
 import phone3d from "../assets/images/phone3d.png";
 import Input from "../components/UI/Input";
-import TextArea from "../components/UI/TextArea";
-import Rating from "../components/UI/Rating";
 import Button from "../components/UI/Button";
 import { useNavigate } from "react-router-dom";
 import BackdropModal from "../components/UI/BackdropModal";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
+import { db } from "../firebase-config";
+import { useStateContext } from "../contexts/ContextProvider";
 
 export default function AddUser() {
+  const { updateCheck } = useStateContext();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   const [author, setAuthor] = useState("");
+  const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, "users"), {
+        name: author,
+        email: email,
+        date: Timestamp.fromDate(new Date(Date.now())),
+      });
+      updateCheck();
+      setShowModal(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-6 xl:py-8 sm:mx-auto">
       <section>
@@ -66,7 +85,7 @@ export default function AddUser() {
           </div>
         </div>
       </section>
-      <section className="flex justify-between gap-20">
+      <form onSubmit={submitHandler} className="flex justify-between gap-20">
         <div className="flex-auto">
           <div className="grid grid-cols-12 gap-y-8">
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
@@ -84,16 +103,47 @@ export default function AddUser() {
                 }}
               />
             </div>
+            <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
+              <label className="">Email</label>
+              <p className="mt-2 text-xs text-white text-opacity-50">
+                Enter the email
+              </p>
+            </div>
+            <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
+              <Input
+                placeholder={"Type something ..."}
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+            </div>
+            {/* <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
+              <label className="">Password</label>
+              <p className="mt-2 text-xs text-white text-opacity-50">
+                Enter the Password
+              </p>
+            </div>
+            <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
+              <Input
+                placeholder={"Type something ..."}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+            </div> */}
           </div>
           <div className="mt-16 flex gap-8">
             <button
+              type="button"
               onClick={() => navigate("/users")}
               className="w-full px-8 py-3 rounded bg-primary-100"
             >
               Cancel
             </button>
             <button
-              onClick={() => setShowModal(true)}
+              type="submit"
               className="w-full px-8 py-3 rounded bg-secondary-300"
             >
               Save
@@ -115,7 +165,7 @@ export default function AddUser() {
             </div>
           </div>
         </div>
-      </section>
+      </form>
       <BackdropModal
         title="Successfully Saved"
         show={showModal}

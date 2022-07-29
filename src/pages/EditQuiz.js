@@ -9,24 +9,64 @@ import BackdropModal from "../components/UI/BackdropModal";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import { isEditable } from "@testing-library/user-event/dist/utils";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { db, storage } from "../firebase-config";
+import { collection, doc, Timestamp, updateDoc } from "firebase/firestore";
+import InputFile from "../components/UI/InputFile";
 
 export default function EditQuiz() {
-  const { selectedItemToEdit, selectItemToEdit } = useStateContext();
+  const { selectedItemToEdit, updateCheck } = useStateContext();
 
   // console.log(selectedItemToEdit);
 
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [filterValue, setFilterValue] = useState("");
-  const [quizTitle, setQuizTitle] = useState(selectedItemToEdit?.name || "");
-  const [paragraph, setParagraph] = useState("");
-  const [answertext, setAnswertext] = useState("");
-  const [image, setImage] = useState("");
+  const [quizTitle, setQuizTitle] = useState(selectedItemToEdit?.name);
+  const [paragraph, setParagraph] = useState(selectedItemToEdit?.paragraph);
+  const [answertext, setAnswertext] = useState(selectedItemToEdit?.ansText);
   const [selectedImage, setSelectedImage] = useState("");
-  const [category, setCategory] = useState("");
-  const [feedback, setFeedback] = useState("");
-  const [rating, setRating] = useState(null);
-  const [answer, setAnswer] = useState("");
+  const [category, setCategory] = useState(selectedItemToEdit?.category);
+  const [author, setAuthor] = useState(selectedItemToEdit?.author);
+  const [comment, setComment] = useState(selectedItemToEdit?.comment);
+  const [rating, setRating] = useState(selectedItemToEdit?.rating);
+  const [answer, setAnswer] = useState(selectedItemToEdit?.answer);
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    let path = "";
+    if (selectedImage) {
+      const imageRef = ref(
+        storage,
+        `quiz_images/${selectedImage.name}-${new Date().getTime()}`
+      );
+      await uploadBytes(imageRef, selectedImage);
+      path = await getDownloadURL(imageRef);
+    }
+    // console.log(imageRef);
+    try {
+      const data = doc(collection(db, "quizes"), selectedItemToEdit?.id);
+      const res = await updateDoc(data, {
+        name: quizTitle,
+        paragraph: paragraph,
+        ansText: answertext,
+        ...(selectedImage
+          ? { image: path }
+          : { image: selectedItemToEdit?.image }),
+        category: category,
+        author: author,
+        comment: comment,
+        rating: rating,
+        answer: answer,
+      });
+
+      console.log(res);
+      updateCheck();
+      navigate(-1);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-6 xl:py-8 sm:mx-auto">
@@ -74,7 +114,7 @@ export default function EditQuiz() {
           </div>
         </div>
       </section>
-      <section className="xl:flex justify-between gap-8">
+      <form onSubmit={submitHandler} className="xl:flex justify-between gap-8">
         <div className="flex-auto">
           <div className="grid grid-cols-12 gap-y-3 sm:gap-y-8">
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
@@ -124,19 +164,36 @@ export default function EditQuiz() {
               />
             </div>
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
-              <label className="">Image</label>
+              <label className="">Author</label>
               <p className="mt-2 text-xs text-white text-opacity-50">
-                Upload image of your quiz
+                Enter Author name
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
               <Input
                 placeholder={"Type something ..."}
-                value={selectedImage}
+                value={author}
                 onChange={(e) => {
+                  setAuthor(e.target.value);
+                }}
+              />
+            </div>
+            <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
+              <label className="">Image</label>
+              <p className="mt-2 text-xs text-white text-opacity-50">
+                Update image of your quiz
+              </p>
+            </div>
+            <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
+              <InputFile
+                imageName={selectedImage?.name}
+                onChange={async (e) => {
                   setSelectedImage(e.target.files[0]);
                 }}
               />
+              <p className="mt-1 text-white text-sm text-opacity-70">
+                (Leave empty if you don't wish to change the image)
+              </p>
             </div>
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Category</label>
@@ -145,13 +202,19 @@ export default function EditQuiz() {
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <Input
-                placeholder={"Type something ..."}
+              <Select
+                alt
                 value={category}
                 onChange={(e) => {
                   setCategory(e.target.value);
                 }}
-              />
+              >
+                <option value="General">General</option>
+                <option value="Science">Science</option>
+                <option value="Maths">Maths</option>
+                <option value="History">History</option>
+                <option value="Geography">Geography</option>
+              </Select>
             </div>
             <div className="col-span-12 sm:col-span-5 sm:pb-8 sm:border-b sm:border-b-primary-100">
               <label className="">Rating</label>
@@ -170,9 +233,9 @@ export default function EditQuiz() {
               <TextArea
                 rows={6}
                 placeholder={"Type something ..."}
-                value={feedback}
+                value={comment}
                 onChange={(e) => {
-                  setFeedback(e.target.value);
+                  setComment(e.target.value);
                 }}
               />
             </div>
@@ -183,24 +246,28 @@ export default function EditQuiz() {
               </p>
             </div>
             <div className="col-span-12 sm:col-span-7 pb-6 sm:pb-8 border-b border-b-primary-100">
-              <Input
-                placeholder={"Type something ..."}
+              <Select
+                alt
                 value={answer}
                 onChange={(e) => {
                   setAnswer(e.target.value);
                 }}
-              />
+              >
+                <option value="True">True</option>
+                <option value="False">False</option>
+              </Select>
             </div>
           </div>
           <div className="hidden xl:flex mt-16 mb-8 gap-8">
             <button
+              type="button"
               onClick={() => navigate("/quiz")}
               className="w-full px-8 py-3 rounded bg-primary-100"
             >
               Cancel
             </button>
             <button
-              onClick={() => setShowModal(true)}
+              type="submit"
               className="w-full px-8 py-3 rounded bg-secondary-300"
             >
               Save
@@ -226,19 +293,20 @@ export default function EditQuiz() {
         </div>
         <div className="flex xl:hidden mt-16 mb-8 gap-8">
           <button
+            type="button"
             onClick={() => navigate("/quiz")}
             className="w-full px-8 py-3 rounded bg-primary-100"
           >
             Cancel
           </button>
           <button
-            onClick={() => setShowModal(true)}
+            type="submit"
             className="w-full px-8 py-3 rounded bg-secondary-300"
           >
             Save
           </button>
         </div>
-      </section>
+      </form>
       <BackdropModal
         title="Successfully Saved"
         show={showModal}
