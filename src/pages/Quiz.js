@@ -1,5 +1,5 @@
 import { collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import profile from "../assets/images/profile.png";
 import DropdownB from "../components/UI/DropdownB";
@@ -7,6 +7,10 @@ import Rating from "../components/UI/Rating";
 import Select from "../components/UI/Select";
 import { useStateContext } from "../contexts/ContextProvider";
 import { db } from "../firebase-config";
+import { isThisMonth, isThisWeek } from "date-fns";
+import { set } from "date-fns/esm";
+import { filterByAnalytics, filterBytype, sortRows } from "../utility/filter";
+
 export default function Quiz() {
   const {
     quiz,
@@ -21,14 +25,41 @@ export default function Quiz() {
   const [disabled, setDisabled] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
+  const [filteredQuizes, setFilteredQuizes] = useState([]);
+  const [analytics, setAnalytics] = useState("All time");
+  const [itemToSort, setItemToSort] = useState(null);
+  const [operator, setOperator] = useState(null);
+  const [type, setType] = useState("All");
+
   const menu = [
     { name: "Image", col: "1", isSortable: false },
-    { name: "Title", col: "2", isSortable: true },
-    { name: "Paragraph", col: "4", isSortable: true },
-    { name: "Author", col: "2", isSortable: true },
-    { name: "Rating", col: "2", isSortable: true },
+    { name: "Title", value: "name", col: "2", isSortable: true },
+    { name: "Paragraph", value: "paragraph", col: "4", isSortable: true },
+    { name: "Author", value: "author", col: "2", isSortable: true },
+    { name: "Rating", value: "rating", col: "2", isSortable: true },
     { name: "Action", col: "1", isSortable: false, xPos: "center" },
   ];
+
+  useEffect(() => {
+    setFilteredQuizes(filterByAnalytics(quiz, analytics));
+  }, [analytics, quiz]);
+
+  useEffect(() => {
+    setFilteredQuizes(filterBytype(quiz, type));
+  }, [type, quiz]);
+
+  useEffect(() => {
+    if (itemToSort !== null) {
+      setFilteredQuizes(sortRows(filteredQuizes, itemToSort, operator));
+    }
+  }, [itemToSort, operator]);
+
+  console.log(operator);
+  console.log(itemToSort);
+  console.log(filteredQuizes);
+
+  // console.log(analytics);
+  // console.log(type);
 
   return (
     <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-0 xl:py-6 sm:mx-auto ">
@@ -75,20 +106,28 @@ export default function Quiz() {
           <div className="sm:flex sm:flex-wrap gap-4">
             <div className="mb-3 sm:mb-0 space-y-1 sm:space-y-0 sm:flex items-center gap-3">
               <label>Show Analytics for: </label>
-              <Select>
-                <option>This week</option>
-                <option>This month</option>
-                <option>All time</option>
-                <option>Last 30 days</option>
+              <Select
+                value={analytics}
+                onChange={(e) => {
+                  setAnalytics(e.target.value);
+                }}
+              >
+                <option value={"All time"}>All time</option>
+                <option value={"This week"}>This week</option>
+                <option value={"This month"}>This month</option>
               </Select>
             </div>
             <div className="mb-6 sm:mb-0 space-y-1 sm:space-y-0 sm:flex items-center gap-3">
               <label>Type:</label>
-              <Select>
-                <option>All</option>
-                {/* <option>This month</option>
-                <option>All time</option>
-                <option>Last 30 days</option> */}
+              <Select
+                value={type}
+                onChange={(e) => {
+                  setType(e.target.value);
+                }}
+              >
+                <option value={"All"}>All</option>
+                {/* <option value={"This week"}>This week</option>
+                <option value={"This month"}>This month</option> */}
               </Select>
             </div>
             <button
@@ -115,11 +154,24 @@ export default function Quiz() {
                   key={item.name}
                   className={`col-span-${item.col} flex items-center gap-2
                   ${item.xPos ? `justify-${item.xPos}` : "justify-start"}`}
+                  onClick={() => {
+                    setItemToSort(item.value);
+                    operator === null && setOperator("ascending");
+                    operator === "ascending" && setOperator("descending");
+                    operator === "descending" && setOperator("ascending");
+                  }}
                 >
                   {item.name}
-                  {item.isSortable && (
+
+                  {item.isSortable && itemToSort === item.value ? (
                     <svg
-                      className="h-2 w-2"
+                      className={`h-2 w-2 ${
+                        operator === "descending"
+                          ? "rotate-180"
+                          : operator === null
+                          ? "opacity-50"
+                          : "rotate-0 opacity-100"
+                      } `}
                       viewBox="0 0 8 5"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -129,13 +181,27 @@ export default function Quiz() {
                         fill="#656EE7"
                       />
                     </svg>
+                  ) : (
+                    item.isSortable && (
+                      <svg
+                        className={`h-2 w-2 opacity-50`}
+                        viewBox="0 0 8 5"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4.36029 4.62558C4.16359 4.82999 3.83641 4.82999 3.63971 4.62558L0.484598 1.34669C0.178938 1.02904 0.404057 0.5 0.844887 0.5L7.15511 0.500001C7.59594 0.500001 7.82106 1.02904 7.5154 1.34669L4.36029 4.62558Z"
+                          fill="#656EE7"
+                        />
+                      </svg>
+                    )
                   )}
                 </h3>
               );
             })}
           </div>
           <div className="min-w-[760px] xl:w-full h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600">
-            {quiz.map((quiz) => {
+            {filteredQuizes.map((quiz) => {
               return (
                 <div
                   key={quiz.id}

@@ -1,5 +1,5 @@
 import { collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import profile from "../assets/images/profile.png";
 import DropdownB from "../components/UI/DropdownB";
@@ -7,17 +7,48 @@ import Rating from "../components/UI/Rating";
 import Select from "../components/UI/Select";
 import { useStateContext } from "../contexts/ContextProvider";
 import { db } from "../firebase-config";
-export default function CategoriesQuiz() {
+import { filterByAnalytics, filterBytype, sortRows } from "../utility/filter";
+export default function CategoriesNews() {
   const navigate = useNavigate();
   const { quizCategories, updateCheck } = useStateContext();
+  console.log(quizCategories);
   const [disabled, setDisabled] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
+  const [analytics, setAnalytics] = useState("All time");
+  const [itemToSort, setItemToSort] = useState(null);
+  const [operator, setOperator] = useState(null);
+  const [type, setType] = useState("All");
+  const [filteredquizCategories, setFilteredquizCategories] = useState([]);
+
   const menu = [
     { name: "#", col: "2", isSortable: false },
-    { name: "Image", col: "7", isSortable: true },
+    { name: "Image", value: "name", col: "7", isSortable: true },
     { name: "Action", col: "3", isSortable: false, xAxis: "center" },
   ];
+
+  useEffect(() => {
+    setFilteredquizCategories(filterByAnalytics(quizCategories, analytics));
+  }, [analytics, quizCategories]);
+
+  useEffect(() => {
+    setFilteredquizCategories(filterBytype(quizCategories, type));
+  }, [type, quizCategories]);
+
+  useEffect(() => {
+    if (itemToSort !== null) {
+      setFilteredquizCategories(
+        sortRows(filteredquizCategories, itemToSort, operator)
+      );
+    }
+  }, [itemToSort, operator]);
+
+  console.log(operator);
+  console.log(itemToSort);
+  console.log(quizCategories);
+  console.log(analytics);
+  console.log(type);
+
   return (
     <div className="w-full min-h-screen sm:max-w-screen-2xl px-6 sm:px-8 xl:px-0 xl:py-6 sm:mx-auto ">
       <div className="">
@@ -57,7 +88,6 @@ export default function CategoriesQuiz() {
               <path d="M15.4418 7.08325C15.722 7.08443 15.9955 7.16866 16.2278 7.32529C16.4601 7.48192 16.6408 7.70392 16.7469 7.96321C16.8531 8.22251 16.88 8.50746 16.8242 8.78203C16.7684 9.0566 16.6324 9.30845 16.4335 9.50575L9.91683 15.9941C9.78405 16.1258 9.67866 16.2825 9.60674 16.4551C9.53481 16.6277 9.49778 16.8129 9.49778 16.9999C9.49778 17.1869 9.53481 17.3721 9.60674 17.5447C9.67866 17.7174 9.78405 17.8741 9.91683 18.0058L16.4335 24.4941C16.5663 24.6258 16.6717 24.7825 16.7436 24.9551C16.8155 25.1278 16.8525 25.3129 16.8525 25.4999C16.8525 25.687 16.8155 25.8721 16.7436 26.0448C16.6717 26.2174 16.5663 26.3741 16.4335 26.5058C16.1681 26.7696 15.809 26.9177 15.4347 26.9177C15.0605 26.9177 14.7014 26.7696 14.436 26.5058L7.9335 20.0033C7.13762 19.2064 6.69058 18.1262 6.69058 16.9999C6.69058 15.8737 7.13762 14.7935 7.93351 13.9966L14.436 7.49409C14.5684 7.36279 14.7253 7.25891 14.898 7.18841C15.0706 7.11791 15.2554 7.08218 15.4418 7.08325Z" />
               <path d="M25.3583 7.08325C25.6385 7.08443 25.912 7.16866 26.1443 7.32529C26.3767 7.48192 26.5573 7.70392 26.6634 7.96321C26.7696 8.22251 26.7965 8.50746 26.7407 8.78203C26.6849 9.0566 26.5489 9.30845 26.35 9.50575L18.8558 16.9999L26.35 24.4941C26.4828 24.6258 26.5882 24.7825 26.6601 24.9551C26.732 25.1278 26.769 25.3129 26.769 25.4999C26.769 25.687 26.732 25.8721 26.6601 26.0448C26.5882 26.2174 26.4828 26.3741 26.35 26.5058C26.0846 26.7696 25.7255 26.9177 25.3512 26.9177C24.977 26.9177 24.6179 26.7696 24.3525 26.5058L15.8525 18.0058C15.7197 17.8741 15.6143 17.7174 15.5424 17.5447C15.4705 17.3721 15.4334 17.1869 15.4334 16.9999C15.4334 16.8129 15.4705 16.6277 15.5424 16.4551C15.6143 16.2825 15.7197 16.1258 15.8525 15.9941L24.3525 7.49409C24.4849 7.36279 24.6418 7.25891 24.8145 7.18841C24.9871 7.11791 25.1719 7.08218 25.3583 7.08325Z" />
             </svg>
-
             <h2 className="text-xl sm:text-2xl text-primary-500 font-medium">
               Categories (Quiz)
             </h2>
@@ -65,20 +95,28 @@ export default function CategoriesQuiz() {
           <div className="sm:flex sm:flex-wrap gap-4">
             <div className="mb-3 sm:mb-0 space-y-1 sm:space-y-0 sm:flex items-center gap-3">
               <label>Show Analytics for: </label>
-              <Select>
-                <option>This week</option>
-                <option>This month</option>
-                <option>All time</option>
-                <option>Last 30 days</option>
+              <Select
+                value={analytics}
+                onChange={(e) => {
+                  setAnalytics(e.target.value);
+                }}
+              >
+                <option value={"All time"}>All time</option>
+                <option value={"This week"}>This week</option>
+                <option value={"This month"}>This month</option>
               </Select>
             </div>
             <div className="mb-6 sm:mb-0 space-y-1 sm:space-y-0 sm:flex items-center gap-3">
               <label>Type:</label>
-              <Select>
-                <option>All</option>
-                {/* <option>This month</option>
-                <option>All time</option>
-                <option>Last 30 days</option> */}
+              <Select
+                value={type}
+                onChange={(e) => {
+                  setType(e.target.value);
+                }}
+              >
+                <option value={"All"}>All</option>
+                {/* <option value={"This week"}>This week</option>
+                <option value={"This month"}>This month</option> */}
               </Select>
             </div>
           </div>
@@ -93,12 +131,24 @@ export default function CategoriesQuiz() {
                   col-span-${item.col} 
                   ${item.xAxis ? `justify-${item.xAxis}` : "justify-start"}
                   text-center`}
+                  onClick={() => {
+                    setItemToSort(item.value);
+                    operator === null && setOperator("ascending");
+                    operator === "ascending" && setOperator("descending");
+                    operator === "descending" && setOperator("ascending");
+                  }}
                 >
                   {item.name}
 
-                  {item.isSortable && (
+                  {item.isSortable && itemToSort === item.value ? (
                     <svg
-                      className="h-2 w-2"
+                      className={`h-2 w-2 ${
+                        operator === "descending"
+                          ? "rotate-180"
+                          : operator === null
+                          ? "opacity-50"
+                          : "rotate-0 opacity-100"
+                      } `}
                       viewBox="0 0 8 5"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -108,6 +158,20 @@ export default function CategoriesQuiz() {
                         fill="#656EE7"
                       />
                     </svg>
+                  ) : (
+                    item.isSortable && (
+                      <svg
+                        className={`h-2 w-2 opacity-50`}
+                        viewBox="0 0 8 5"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4.36029 4.62558C4.16359 4.82999 3.83641 4.82999 3.63971 4.62558L0.484598 1.34669C0.178938 1.02904 0.404057 0.5 0.844887 0.5L7.15511 0.500001C7.59594 0.500001 7.82106 1.02904 7.5154 1.34669L4.36029 4.62558Z"
+                          fill="#656EE7"
+                        />
+                      </svg>
+                    )
                   )}
                 </h3>
               );

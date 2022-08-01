@@ -1,8 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import {
   createUserWithEmailAndPassword,
+  FacebookAuthProvider,
+  GoogleAuthProvider,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateEmail,
   updatePassword,
@@ -22,6 +25,14 @@ export function AuthProvider({ children }) {
 
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
+  }
+  function googleSignIn() {
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(auth, provider);
+  }
+  function facebookSignIn() {
+    const provider = new FacebookAuthProvider();
+    return signInWithPopup(auth, provider);
   }
 
   function login(email, password) {
@@ -62,6 +73,8 @@ export function AuthProvider({ children }) {
     login,
     signup,
     logout,
+    facebookSignIn,
+    googleSignIn,
     resetPassword,
     changeEmail,
     changeProfile,
